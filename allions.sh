@@ -786,7 +786,7 @@ else
                              else
                                  echo;
                                  echo "${txtylw}Wait a minute, I look for another source ...${txtrst}";sleep 2
-                                 cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                 cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
                                  echo "${txtgrn}Nagios version 4.4.11 has been download and we will install it to your server${txtrst}"
                                  echo
                                  sleep 2
@@ -985,7 +985,7 @@ else
                                else
                                         echo;
                                         echo "${txtylw}Wait a minute, I look for another source ...${txtrst}";sleep 2
-                                        cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                        cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
                                         echo "${txtgrn}Nagios version 4.4.11 has been download and we will install it to your server${txtrst}"
                                         echo
                                         sleep 2
@@ -1651,7 +1651,7 @@ then
                          [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                  sleep 2
                                  echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
-                                 cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                 cd upgrade-nagios;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
                                  echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                                  tar -zxvf nagios-4.4.11.tar.gz
                                  cd nagios-4.4.11
@@ -1773,7 +1773,7 @@ else
                                                         [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                                                 sleep 2
                                                                 echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
-                                                                cd upgrade-plugin;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                                                cd upgrade-plugin;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
                                                                 echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                                                                 tar -zxvf nagios-4.4.11.tar.gz
                                                                 cd nagios-4.4.11
@@ -1867,7 +1867,7 @@ then
                          [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                          sleep 2
                          echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
-                         cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                         cd upgrade-nagios;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
                          echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                          sleep 1
                          echo
@@ -1992,7 +1992,7 @@ else
                                                 [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                                         sleep 2
                                                         echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
-                                                        cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                                        cd upgrade-nagios;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
                                                         echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                                                         sleep 1
                                                         echo
@@ -2080,7 +2080,7 @@ then
                          [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                  sleep 2
                                  echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
-                                 cd upgrade-plugin 2>/dev/null;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                 cd upgrade-plugin 2>/dev/null;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
                                  echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                                  echo
                                  tar -zxvf nagios-4.4.11.tar.gz
@@ -2206,7 +2206,7 @@ else
                                              [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                                      sleep 2
                                                      echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
-                                                     cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                                     cd upgrade-nagios;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
                                                      echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                                                      sleep 2
                                                      echo
