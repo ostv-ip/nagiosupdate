@@ -328,7 +328,7 @@ echo "Nagios core latest version has been installed" 2> /dev/null >> $log
 nagioscore_centos_446() {
 echo "${txtylw}Extract package Nagios${txtrst}"
 sleep 2
-tar -zxvf nagios-4.4.6.tar.gz;check
+tar -zxvf nagios-4.4.11.tar.gz;check
 sleep 2
 echo "${txtgrn}Done${txtrst}"
 echo "Extract package Nagios successfully" 2> /dev/null >> $log
@@ -341,7 +341,7 @@ echo "${txtgrn}Done${txtrst}"
 echo;echo
 echo "${txtylw}Compiling Nagios${txtrst}"
 sleep 2
-cd nagios-4.4.6;./configure --with-command-group=nagcmd;check;echo;sleep 1;make all;check;echo;sleep 1;make install;check;echo;sleep 1make install-init;check;echo;sleep 1;make install-config;check;echo;sleep 1;make install-commandmode;check;echo;sleep 1;make install-webconf;check;echo;sleep 1;
+cd nagios-4.4.11;./configure --with-command-group=nagcmd;check;echo;sleep 1;make all;check;echo;sleep 1;make install;check;echo;sleep 1make install-init;check;echo;sleep 1;make install-config;check;echo;sleep 1;make install-commandmode;check;echo;sleep 1;make install-webconf;check;echo;sleep 1;
 echo "Compiling Nagios successfully" 2> /dev/null >> $log
 echo "${txtgrn}Done${txtrst}"
 sleep 2
@@ -364,9 +364,9 @@ echo "${txtgrn}Done${txtrst}"
 sleep 2
 echo "Restarting Apache Service successfully" 2> /dev/null >> $log
 echo;echo
-echo "${txtgrn}Congratulation, Nagios version 4.4.6 has been installed.${txtrst}"
+echo "${txtgrn}Congratulation, Nagios version 4.4.11 has been installed.${txtrst}"
 sleep 2
-echo "Nagios core version 4.4.6 has been installed" 2> /dev/null >> $log
+echo "Nagios core version 4.4.11 has been installed" 2> /dev/null >> $log
 install_plugin_centos
 sleep 2
 echo "Nagios core update version has been installed" 2> /dev/null >> $log
@@ -378,7 +378,7 @@ echo "Nagios core update version has been installed" 2> /dev/null >> $log
 nagioscore_ubuntu_446() {
 echo "${txtylw}Extract package Nagios${txtrst}"
 sleep 2
-tar -zxvf nagios-4.4.6.tar.gz;check
+tar -zxvf nagios-4.4.11.tar.gz;check
 sleep 2
 echo "${txtgrn}Done${txtrst}"
 echo "Extract package Nagios successfully" 2> /dev/null >> $log
@@ -391,7 +391,7 @@ echo "${txtgrn}Done${txtrst}"
 echo;echo
 echo "${txtylw}Compiling Nagios${txtrst}"
 sleep 2
-cd nagios-4.4.6;./configure --with-command-group=nagcmd --with-httpd-conf=/etc/apache2/sites-enabled;check;echo;sleep 1;make all;check;echo;sleep 1;make install;check;echo;sleep 1;make install-init;check;echo;sleep 1;make install-daemoninit;check;echo;sleep 1;make install-config;check;echo;sleep 1;make install-commandmode;check;echo;sleep 1;make install-webconf;check;echo;sleep 1;a2enmod rewrite;check;echo;sleep 1;a2enmod cgi;check;echo;sleep 1;
+cd nagios-4.4.11;./configure --with-command-group=nagcmd --with-httpd-conf=/etc/apache2/sites-enabled;check;echo;sleep 1;make all;check;echo;sleep 1;make install;check;echo;sleep 1;make install-init;check;echo;sleep 1;make install-daemoninit;check;echo;sleep 1;make install-config;check;echo;sleep 1;make install-commandmode;check;echo;sleep 1;make install-webconf;check;echo;sleep 1;a2enmod rewrite;check;echo;sleep 1;a2enmod cgi;check;echo;sleep 1;
 echo "Compiling Nagios successfully" 2> /dev/null >> $log
 echo "${txtgrn}Done${txtrst}"
 sleep 2
@@ -411,9 +411,9 @@ echo "${txtgrn}Done${txtrst}"
 sleep 2
 echo "Restarting Apache Service successfully" 2> /dev/null >> $log
 echo;echo
-echo "${txtgrn}Congratulation, Nagios version 4.4.6 has been installed.${txtrst}"
+echo "${txtgrn}Congratulation, Nagios version 4.4.11 has been installed.${txtrst}"
 sleep 2
-echo "Nagios core version 4.4.6 has been installed" 2> /dev/null >> $log
+echo "Nagios core version 4.4.11 has been installed" 2> /dev/null >> $log
 install_plugin_centos
 sleep 2
 echo "Nagios core update version has been installed" 2> /dev/null >> $log
@@ -423,7 +423,7 @@ echo "Nagios core update version has been installed" 2> /dev/null >> $log
 nagioscore_suse_446() {
 echo "${txtylw}Extract package Nagios${txtrst}"
 sleep 2
-tar -zxvf nagios-4.4.6.tar.gz;check
+tar -zxvf nagios-4.4.11.tar.gz;check
 sleep 2
 echo "${txtgrn}Done${txtrst}"
 echo "Extract package Nagios successfully" 2> /dev/null >> $log
@@ -436,7 +436,7 @@ echo "${txtgrn}Done${txtrst}"
 echo;echo
 echo "${txtylw}Compiling Nagios${txtrst}"
 sleep 2
-cd nagios-4.4.6;./configure --with-command-group=nagcmd --with-httpd-conf=/etc/apache2/vhosts.d;check;echo;sleep 1;make all;check;echo;sleep 1;make install-groups-users;check;echo;sleep 1;make install;check;echo;sleep 1;make install-init;check;echo;sleep 1;make install-daemoninit;check;echo;sleep 1;make install-config;check;echo;sleep 1;make install-commandmode;check;echo;sleep 1;make install-webconf;check;echo;sleep 1;/usr/sbin/a2enmod rewrite;echo;sleep 1;/usr/sbin/a2enmod cgi;echo;sleep 1;/usr/sbin/a2enmod version;echo;sleep 1;/usr/sbin/a2enmod php7;echo;sleep 1;
+cd nagios-4.4.11;./configure --with-command-group=nagcmd --with-httpd-conf=/etc/apache2/vhosts.d;check;echo;sleep 1;make all;check;echo;sleep 1;make install-groups-users;check;echo;sleep 1;make install;check;echo;sleep 1;make install-init;check;echo;sleep 1;make install-daemoninit;check;echo;sleep 1;make install-config;check;echo;sleep 1;make install-commandmode;check;echo;sleep 1;make install-webconf;check;echo;sleep 1;/usr/sbin/a2enmod rewrite;echo;sleep 1;/usr/sbin/a2enmod cgi;echo;sleep 1;/usr/sbin/a2enmod version;echo;sleep 1;/usr/sbin/a2enmod php7;echo;sleep 1;
 echo "Compiling Nagios successfully" 2> /dev/null >> $log
 echo "${txtgrn}Done${txtrst}"
 sleep 2
@@ -458,9 +458,9 @@ echo "${txtgrn}Done${txtrst}"
 sleep 2
 echo "Restarting Apache Service successfully" 2> /dev/null >> $log
 echo;echo
-echo "${txtgrn}Congratulation, Nagios version 4.4.6 has been installed.${txtrst}"
+echo "${txtgrn}Congratulation, Nagios version 4.4.11 has been installed.${txtrst}"
 sleep 2
-echo "Nagios core version 4.4.6 has been installed" 2> /dev/null >> $log
+echo "Nagios core version 4.4.11 has been installed" 2> /dev/null >> $log
 install_plugin_centos
 sleep 2
 echo "Nagios core update version has been installed" 2> /dev/null >> $log
@@ -600,7 +600,7 @@ echo
 cd $path;wget --no-check-certificate -q https://www.nagios.org/downloads/nagios-core/thanks/?t=1504034794 2> /dev/null
 
 
-############ if fails to find the last version, download version 4.4.6 ################
+############ if fails to find the last version, download version 4.4.11 ################
 latest_nagios=`cat index.html* 2>/dev/null  | grep "assets.nagios.com/downloads/nagioscore/releases" | sed -n '1p' | awk '{print $6}' | sed -e 's/<[^()]*>//g' | sed -e 's/\/[^()]*\///g' | sed -e 's/\"[^()]*\">//g' | sed -e 's/href=//g' `
 
 echo $latest_nagios | grep tar.gz > targz.txt
@@ -628,17 +628,17 @@ then
                 else
                          echo ${txtred}I detected there is a problem when I want to check the latest version of Nagios.${txtrst}
                          sleep 2
-                         echo ${txtylw}So, I will install Nagios core version 4.4.6.${txtrst}
+                         echo ${txtylw}So, I will install Nagios core version 4.4.11.${txtrst}
 
                          while true
                          do
                                  echo
                                  read -p "Are you sure want to continue (y/n)? " answer
                                  case $answer in
-                                 [yY]* ) echo "${txtpur}Okay, I will download Nagios version 4.4.6 from official web.${txtrst}"
+                                 [yY]* ) echo "${txtpur}Okay, I will download Nagios version 4.4.11 from official web.${txtrst}"
                                          sleep 2
-                                         cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                         echo "${txtgrn}Nagios version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                         cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                         echo "${txtgrn}Nagios version 4.4.11 has been download and we will install it to your server${txtrst}"
                                          sleep 1
                                          nagioscore_ubuntu_446
                                  break;;
@@ -652,17 +652,17 @@ then
 else
         echo ${txtred}I detected there is a problem when I want to check the latest version of Nagios.${txtrst}
         sleep 2
-        echo ${txtylw}So, I will install Nagios core version 4.4.6.${txtrst}
+        echo ${txtylw}So, I will install Nagios core version 4.4.11.${txtrst}
 
         while true
         do
         echo
         read -p "Are you sure want to continue (y/n)? " answer
         case $answer in
-                [yY]* ) echo "${txtpur}Okay, I will download Nagios version 4.4.6 from official web.${txtrst}"
+                [yY]* ) echo "${txtpur}Okay, I will download Nagios version 4.4.11 from official web.${txtrst}"
                         sleep 2
                         echo
-                        cd $path;wget  --no-check-certificate https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz
+                        cd $path;wget  --no-check-certificate https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz
                         count=`ls -1 nagios-*.tar.gz  2>/dev/null | wc -l`
                         if [ $count != 0 ]
                         then
@@ -671,8 +671,8 @@ else
                                 echo;
                                 sleep 2;
                                 echo "${txtylw}Wait a minute, I look for another source ...${txtrst}";sleep 2
-                                cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                echo "${txtgrn}Nagios version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                echo "${txtgrn}Nagios version 4.4.11 has been download and we will install it to your server${txtrst}"
                                 echo
                                 sleep 2
                                 nagioscore_ubuntu_446
@@ -717,7 +717,7 @@ echo
 cd $path;wget --no-check-certificate -q https://www.nagios.org/downloads/nagios-core/thanks/?t=1504034794 2> /dev/null
 
 
-############ if fails to find the last version, download version 4.4.6 ################
+############ if fails to find the last version, download version 4.4.11 ################
 latest_nagios=`cat index.html* 2>/dev/null  | grep "assets.nagios.com/downloads/nagioscore/releases" | sed -n '1p' | awk '{print $6}' | sed -e 's/<[^()]*>//g' | sed -e 's/\/[^()]*\///g' | sed -e 's/\"[^()]*\">//g' | sed -e 's/href=//g' `
 
 
@@ -743,17 +743,17 @@ then
                 else
                          echo ${txtred}I detected there is a problem when I want to check the latest version of Nagios.${txtrst}
                          sleep 2
-                         echo ${txtylw}So, I will install Nagios core version 4.4.6.${txtrst}
+                         echo ${txtylw}So, I will install Nagios core version 4.4.11.${txtrst}
 
                          while true
                          do
                                 echo
                                 read -p "Are you sure want to continue (y/n)? " answer
                                 case $answer in
-                                [yY]* ) echo "${txtpur}Okay, I will download Nagios version 4.4.6 from official web${txtrst}"
+                                [yY]* ) echo "${txtpur}Okay, I will download Nagios version 4.4.11 from official web${txtrst}"
                                         sleep 2
-                                        cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                        echo "${txtgrn}Nagios version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                        cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                        echo "${txtgrn}Nagios version 4.4.11 has been download and we will install it to your server${txtrst}"
                                         sleep 1
                                         nagioscore_suse_446
                                         break;;
@@ -767,17 +767,17 @@ then
 else
         echo ${txtred}I detected there is a problem when I want to check the latest version of Nagios.${txtrst}
         sleep 2
-        echo ${txtylw}So, I will install Nagios core version 4.4.6.${txtrst}
+        echo ${txtylw}So, I will install Nagios core version 4.4.11.${txtrst}
 
         while true
         do
                 echo
                 read -p "Are you sure want to continue (y/n)? " answer
                 case $answer in
-                   [yY]* )   echo "${txtpur}Okay, I will download Nagios version 4.4.6 from official web.${txtrst}"
+                   [yY]* )   echo "${txtpur}Okay, I will download Nagios version 4.4.11 from official web.${txtrst}"
                              sleep 2
                              echo
-                             cd $path;wget  --no-check-certificate https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz
+                             cd $path;wget  --no-check-certificate https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz
                              sleep 2
                              count=`ls -1 nagios-*.tar.gz  2>/dev/null | wc -l`
                              if [ $count != 0 ]
@@ -786,8 +786,8 @@ else
                              else
                                  echo;
                                  echo "${txtylw}Wait a minute, I look for another source ...${txtrst}";sleep 2
-                                 cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                 echo "${txtgrn}Nagios version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                 cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                 echo "${txtgrn}Nagios version 4.4.11 has been download and we will install it to your server${txtrst}"
                                  echo
                                  sleep 2
                                  nagioscore_suse_446
@@ -917,7 +917,7 @@ echo
 cd $path;wget --no-check-certificate -q https://www.nagios.org/downloads/nagios-core/thanks/?t=1504034794 2> /dev/null
 
 
-############ if fails to find the last version, download version 4.4.6 ################
+############ if fails to find the last version, download version 4.4.11 ################
 latest_nagios=`cat index.html* 2>/dev/null  | grep "assets.nagios.com/downloads/nagioscore/releases" | sed -n '1p' | awk '{print $6}' | sed -e 's/<[^()]*>//g' | sed -e 's/\/[^()]*\///g' | sed -e 's/\"[^()]*\">//g' | sed -e 's/href=//g' `
 
 
@@ -943,17 +943,17 @@ then
                 else
                          echo ${txtred}I detected there is a problem when I want to check the latest version of Nagios.${txtrst}
                          sleep 2
-                         echo ${txtylw}So, I will install Nagios core version 4.4.6.${txtrst}
+                         echo ${txtylw}So, I will install Nagios core version 4.4.11.${txtrst}
 
                          while true
                          do
                                 echo
                                 read -p "Are you sure want to continue (y/n)? " answer
                                 case $answer in
-                                     [yY]* )    echo "${txtpur}Okay, I will download Nagios version 4.4.6 from official web.${txtrst}"
+                                     [yY]* )    echo "${txtpur}Okay, I will download Nagios version 4.4.11 from official web.${txtrst}"
                                                 sleep 2
-                                                cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                                echo "${txtgrn}Nagios version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                                cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                                echo "${txtgrn}Nagios version 4.4.11 has been download and we will install it to your server${txtrst}"
                                                 sleep 1
                                                 nagioscore_centos_446
                                                 break;;
@@ -967,17 +967,17 @@ then
 else
         echo ${txtred}I detected there is a problem when I want to check the latest version of Nagios.${txtrst}
         sleep 2
-        echo ${txtylw}So, I will install Nagios core version 4.4.6.${txtrst}
+        echo ${txtylw}So, I will install Nagios core version 4.4.11.${txtrst}
 
         while true
         do
                 echo
                 read -p "Are you sure want to continue (y/n)? " answer
                 case $answer in
-                     [yY]* )   echo "${txtpur}Okay, I will download Nagios version 4.4.6 from official web.${txtrst}"
+                     [yY]* )   echo "${txtpur}Okay, I will download Nagios version 4.4.11 from official web.${txtrst}"
                                sleep 2
                                echo
-                               cd $path;wget  --no-check-certificate https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.6.tar.gz
+                               cd $path;wget  --no-check-certificate https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.11.tar.gz
                                count=`ls -1 nagios-*.tar.gz  2>/dev/null | wc -l`
                                if [ $count != 0 ]
                                then
@@ -985,8 +985,8 @@ else
                                else
                                         echo;
                                         echo "${txtylw}Wait a minute, I look for another source ...${txtrst}";sleep 2
-                                        cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                        echo "${txtgrn}Nagios version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                        cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                        echo "${txtgrn}Nagios version 4.4.11 has been download and we will install it to your server${txtrst}"
                                         echo
                                         sleep 2
                                         nagioscore_centos_446
@@ -1641,20 +1641,20 @@ then
          echo ${txtred}I am sorry, I can not check the latest version from the official web because there is a problem.${txtrst}
          sleep 2
          echo
-         echo ${txtylw}I will install Nagios Core version 4.4.6 from another source.${txtrst}
+         echo ${txtylw}I will install Nagios Core version 4.4.11 from another source.${txtrst}
          while true
          do
                          sleep 2
                          echo
                          read -p "Are you sure want to continue (y/n)? " answer
                          case $answer in
-                         [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.6${txtrst}"
+                         [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                  sleep 2
-                                 echo "${txtylw}Downloading Nagios Core version 4.4.6 ... ${txtrst}"
-                                 cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                 echo "${txtgrn}Nagios Core version 4.4.6 has been download and we will install it to your server${txtrst}"
-                                 tar -zxvf nagios-4.4.6.tar.gz
-                                 cd nagios-4.4.6
+                                 echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
+                                 cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                 echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
+                                 tar -zxvf nagios-4.4.11.tar.gz
+                                 cd nagios-4.4.11
                                  ./configure --with-httpd-conf=/etc/apache2/vhosts.d
                                  make all
                                  make install
@@ -1665,7 +1665,7 @@ then
                                  sleep 2
                                  /usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' |  sed s/.$//
                                  echo
-                                 echo "${txtylw}Your Nagios Core version is 4.4.6${txtrst}"
+                                 echo "${txtylw}Your Nagios Core version is 4.4.11${txtrst}"
                                  echo
                                  sleep 2
                                  echo
@@ -1764,19 +1764,19 @@ else
                                 else
                                         sleep 2;echo ${txtred}I detected there is a problem when I want to download latest Nagios Plugins version from official web.${txtrst}
                                         sleep 2
-                                        echo ${txtylw}I will install Nagios Core version 4.4.6 from another source.${txtrst}
+                                        echo ${txtylw}I will install Nagios Core version 4.4.11 from another source.${txtrst}
                                         while true
                                         do
                                                  echo
                                                  read -p "Are you sure want to continue (y/n)? " answer
                                                  case $answer in
-                                                        [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.6${txtrst}"
+                                                        [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                                                 sleep 2
-                                                                echo "${txtylw}Downloading Nagios Core version 4.4.6 ... ${txtrst}"
-                                                                cd upgrade-plugin;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                                                echo "${txtgrn}Nagios Core version 4.4.6 has been download and we will install it to your server${txtrst}"
-                                                                tar -zxvf nagios-4.4.6.tar.gz
-                                                                cd nagios-4.4.6
+                                                                echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
+                                                                cd upgrade-plugin;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                                                echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
+                                                                tar -zxvf nagios-4.4.11.tar.gz
+                                                                cd nagios-4.4.11
                                                                 ./configure --with-httpd-conf=/etc/apache2/vhosts.d
                                                                 make all
                                                                 make install
@@ -1787,7 +1787,7 @@ else
                                                                 sleep 2
                                                                 /usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' |  sed s/.$//
                                                                 echo
-                                                                echo "${txtpur}Your Nagios Core version is 4.4.6${txtrst}"
+                                                                echo "${txtpur}Your Nagios Core version is 4.4.11${txtrst}"
                                                                 echo
                                                                 sleep 2
                                                                 echo
@@ -1857,22 +1857,22 @@ then
          echo ${txtred}I am sorry, I can not check the latest version from the official web because there is a problem.${txtrst}
          sleep 2
          echo
-         echo ${txtylw}I will install Nagios Core version 4.4.6 from another source.${txtrst}
+         echo ${txtylw}I will install Nagios Core version 4.4.11 from another source.${txtrst}
          while true
          do
                          sleep 2
                          echo
                          read -p "Are you sure want to continue (y/n)? " answer
                          case $answer in
-                         [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.6${txtrst}"
+                         [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                          sleep 2
-                         echo "${txtylw}Downloading Nagios Core version 4.4.6 ... ${txtrst}"
-                         cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                         echo "${txtgrn}Nagios Core version 4.4.6 has been download and we will install it to your server${txtrst}"
+                         echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
+                         cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                         echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                          sleep 1
                          echo
-                         tar -zxvf nagios-4.4.6.tar.gz
-                         cd nagios-4.4.6
+                         tar -zxvf nagios-4.4.11.tar.gz
+                         cd nagios-4.4.11
                          ./configure --with-httpd-conf=/etc/apache2/sites-enabled
                          make all
                          make install
@@ -1884,7 +1884,7 @@ then
                          /usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' |  sed s/.$//
                          echo
                          echo
-                         echo "${txtpur}Your Nagios Core version is 4.4.6${txtrst}"
+                         echo "${txtpur}Your Nagios Core version is 4.4.11${txtrst}"
                          echo
                          sleep 2
                          echo
@@ -1983,21 +1983,21 @@ else
                                 else
                                     sleep 2;echo ${txtred}I detected there is a problem when I want to download latest Nagios Plugins version from official web.${txtrst}
                                     sleep 2
-                                    echo ${txtylw}I will install Nagios Core version 4.4.6 from another source.${txtrst}
+                                    echo ${txtylw}I will install Nagios Core version 4.4.11 from another source.${txtrst}
                                     while true
                                     do
                                             echo
                                             read -p "Are you sure want to continue (y/n)? " answer
                                             case $answer in
-                                                [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.6${txtrst}"
+                                                [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                                         sleep 2
-                                                        echo "${txtylw}Downloading Nagios Core version 4.4.6 ... ${txtrst}"
-                                                        cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                                        echo "${txtgrn}Nagios Core version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                                        echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
+                                                        cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                                        echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                                                         sleep 1
                                                         echo
-                                                        tar -zxvf nagios-4.4.6.tar.gz
-                                                        cd nagios-4.4.6
+                                                        tar -zxvf nagios-4.4.11.tar.gz
+                                                        cd nagios-4.4.11
                                                         ./configure --with-httpd-conf=/etc/apache2/sites-enabled
                                                         make all
                                                         make install
@@ -2008,7 +2008,7 @@ else
                                                         sleep 2
                                                         /usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' |  sed s/.$//
                                                         echo
-                                                        echo "${txtpur}Your Nagios Core version is 4.4.6${txtrst}"
+                                                        echo "${txtpur}Your Nagios Core version is 4.4.11${txtrst}"
                                                         echo
                                                         sleep 2
                                                         echo
@@ -2070,21 +2070,21 @@ then
          echo ${txtred}I am sorry, I can not check the latest version from the official web because there is a problem.${txtrst}
          sleep 2
          echo
-         echo ${txtylw}I will install Nagios Core version 4.4.6 from another source.${txtrst}
+         echo ${txtylw}I will install Nagios Core version 4.4.11 from another source.${txtrst}
          while true
          do
                          sleep 2
                          echo
                          read -p "Are you sure want to continue (y/n)?" answer
                          case $answer in
-                         [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.6${txtrst}"
+                         [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                  sleep 2
-                                 echo "${txtylw}Downloading Nagios Core version 4.4.6 ... ${txtrst}"
-                                 cd upgrade-plugin 2>/dev/null;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                 echo "${txtgrn}Nagios Core version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                 echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
+                                 cd upgrade-plugin 2>/dev/null;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                 echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                                  echo
-                                 tar -zxvf nagios-4.4.6.tar.gz
-                                 cd nagios-4.4.6
+                                 tar -zxvf nagios-4.4.11.tar.gz
+                                 cd nagios-4.4.11
                                  ./configure
                                  make all
                                  make install
@@ -2096,7 +2096,7 @@ then
                                  sleep 2
                                  /usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' |  sed s/.$//
                                  echo
-                                 echo "${txtylw}Your Nagios Core version is 4.4.6${txtrst}"
+                                 echo "${txtylw}Your Nagios Core version is 4.4.11${txtrst}"
                                  echo
                                  sleep 2
                                  echo
@@ -2197,21 +2197,21 @@ else
                                 else
                                     sleep 2;echo ${txtred}I detected there is a problem when I want to download latest Nagios Plugins version from official web.${txtrst}
                                     sleep 2
-                                    echo ${txtylw}I will install Nagios Core version 4.4.6 from another source.${txtrst}
+                                    echo ${txtylw}I will install Nagios Core version 4.4.11 from another source.${txtrst}
                                     while true
                                     do
                                          echo
                                          read -p "Are you sure want to continue (y/n)? " answer
                                          case $answer in
-                                             [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.6${txtrst}"
+                                             [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.4.11${txtrst}"
                                                      sleep 2
-                                                     echo "${txtylw}Downloading Nagios Core version 4.4.6 ... ${txtrst}"
-                                                     cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.6.tar/nagios-4.4.6.tar.gz' -O nagios-4.4.6.tar.gz
-                                                     echo "${txtgrn}Nagios Core version 4.4.6 has been download and we will install it to your server${txtrst}"
+                                                     echo "${txtylw}Downloading Nagios Core version 4.4.11 ... ${txtrst}"
+                                                     cd upgrade-nagios;wget --no-check-certificate 'https://archive.org/download/nagios-4.4.11.tar/nagios-4.4.11.tar.gz' -O nagios-4.4.11.tar.gz
+                                                     echo "${txtgrn}Nagios Core version 4.4.11 has been download and we will install it to your server${txtrst}"
                                                      sleep 2
                                                      echo
-                                                     tar -zxvf nagios-4.4.6.tar.gz
-                                                     cd nagios-4.4.6
+                                                     tar -zxvf nagios-4.4.11.tar.gz
+                                                     cd nagios-4.4.11
                                                      ./configure
                                                      make all
                                                      make install
@@ -2223,7 +2223,7 @@ else
                                                      sleep 2
                                                      /usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' |  sed s/.$//
                                                      echo
-                                                     echo "${txtpur}Your Nagios Core version is 4.4.6${txtrst}"
+                                                     echo "${txtpur}Your Nagios Core version is 4.4.11${txtrst}"
                                                      echo
                                                      sleep 2
                                                      echo
