@@ -36,3 +36,6 @@ This option will delete Nagios package.
 
 ---
 This bash script runs fine on RedHat-based (CentOS6, CentOS7, CentOS8, RockyLinux, AlmaLinux), Ubuntu server 20.04.3, Debian10, and OpenSUSE 15.3
+
+### Credit 
+All credit goes to https://github.com/sysadminote original developer of this script.
