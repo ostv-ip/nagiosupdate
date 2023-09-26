@@ -325,7 +325,7 @@ echo "Nagios core latest version has been installed" 2> /dev/null >> $log
 }
 
 
-nagioscore_centos_4413() {
+nagioscore_centos_4414() {
 echo "${txtylw}Extract package Nagios${txtrst}"
 sleep 2
 tar -zxvf nagios-4.4.14.tar.gz;check
@@ -375,7 +375,7 @@ echo "Nagios core update version has been installed" 2> /dev/null >> $log
 
 
 
-nagioscore_ubuntu_4413() {
+nagioscore_ubuntu_4414() {
 echo "${txtylw}Extract package Nagios${txtrst}"
 sleep 2
 tar -zxvf nagios-4.4.14.tar.gz;check
@@ -420,7 +420,7 @@ echo "Nagios core update version has been installed" 2> /dev/null >> $log
 }
 
 
-nagioscore_suse_4413() {
+nagioscore_suse_4414() {
 echo "${txtylw}Extract package Nagios${txtrst}"
 sleep 2
 tar -zxvf nagios-4.4.14.tar.gz;check
@@ -640,7 +640,7 @@ then
                                          cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.14.tar.gz' -O nagios-4.4.14.tar.gz
                                          echo "${txtgrn}Nagios version 4.4.14 has been download and we will install it to your server${txtrst}"
                                          sleep 1
-                                         nagioscore_ubuntu_4413
+                                         nagioscore_ubuntu_4414
                                  break;;
                                  [nN]* ) sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log*
                                          thankyou
@@ -666,7 +666,7 @@ else
                         count=`ls -1 nagios-*.tar.gz  2>/dev/null | wc -l`
                         if [ $count != 0 ]
                         then
-                                nagioscore_ubuntu_4413
+                                nagioscore_ubuntu_4414
                         else
                                 echo;
                                 sleep 2;
@@ -675,7 +675,7 @@ else
                                 echo "${txtgrn}Nagios version 4.4.14 has been download and we will install it to your server${txtrst}"
                                 echo
                                 sleep 2
-                                nagioscore_ubuntu_4413
+                                nagioscore_ubuntu_4414
                         fi
                 break;;
 
@@ -755,7 +755,7 @@ then
                                         cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.14.tar.gz' -O nagios-4.4.14.tar.gz
                                         echo "${txtgrn}Nagios version 4.4.14 has been download and we will install it to your server${txtrst}"
                                         sleep 1
-                                        nagioscore_suse_4413
+                                        nagioscore_suse_4414
                                         break;;
                                 [nN]* ) sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log*
                                         thankyou
@@ -782,7 +782,7 @@ else
                              count=`ls -1 nagios-*.tar.gz  2>/dev/null | wc -l`
                              if [ $count != 0 ]
                              then
-                                 nagioscore_suse_4413
+                                 nagioscore_suse_4414
                              else
                                  echo;
                                  echo "${txtylw}Wait a minute, I look for another source ...${txtrst}";sleep 2
@@ -790,7 +790,7 @@ else
                                  echo "${txtgrn}Nagios version 4.4.14 has been download and we will install it to your server${txtrst}"
                                  echo
                                  sleep 2
-                                 nagioscore_suse_4413
+                                 nagioscore_suse_4414
                              fi
                                 break;;
                    [nN]* )   sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log*
@@ -955,7 +955,7 @@ then
                                                 cd $path;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.4.14.tar.gz' -O nagios-4.4.14.tar.gz
                                                 echo "${txtgrn}Nagios version 4.4.14 has been download and we will install it to your server${txtrst}"
                                                 sleep 1
-                                                nagioscore_centos_4413
+                                                nagioscore_centos_4414
                                                 break;;
                                      [nN]* )    sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log* httpd.txt
                                                 thankyou
@@ -981,7 +981,7 @@ else
                                count=`ls -1 nagios-*.tar.gz  2>/dev/null | wc -l`
                                if [ $count != 0 ]
                                then
-                                        nagioscore_centos_4413
+                                        nagioscore_centos_4414
                                else
                                         echo;
                                         echo "${txtylw}Wait a minute, I look for another source ...${txtrst}";sleep 2
@@ -989,7 +989,7 @@ else
                                         echo "${txtgrn}Nagios version 4.4.14 has been download and we will install it to your server${txtrst}"
                                         echo
                                         sleep 2
-                                        nagioscore_centos_4413
+                                        nagioscore_centos_4414
                                fi
                                break;;
                      [nN]* )   sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log* httpd.txt
