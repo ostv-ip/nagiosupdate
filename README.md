@@ -1,4 +1,4 @@
-**Updated script to download Nagios Core version 4.5.2**
+**Updated script to download Nagios Core version 4.5.3**
 
 ### Purpose
 
