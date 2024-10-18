@@ -850,6 +850,25 @@ sleep 2
 
 echo "I will download the latest version of Nagios Plugins."
 cd /tmp
+wget -q --no-check-certificate https://nagios-plugins.org/download/ -O index.html
+
+# Filter for the correct Nagios plugin files and exclude docs
+nagios_plugin=$(grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' index.html | grep -v 'docs' | sort -V | tail -n 1)
+
+# Check if a valid plugin was found
+if [[ "$nagios_plugin" == "" ]]; then
+    echo "Error: Could not find a valid Nagios plugin version."
+    exit 1
+fi
+
+# Extract the version number
+version=$(echo $nagios_plugin | sed 's/nagios-plugins-//' | sed 's/\.tar\.gz//')
+
+echo "Latest Nagios Plugins version is $version"
+sleep 2
+
+echo "I will download the latest version of Nagios Plugins."
+cd /tmp
 wget --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
 if [[ $? -ne 0 ]]; then
     echo "Failed to download the plugin. Exiting."
@@ -862,6 +881,8 @@ if [[ $? -ne 0 ]]; then
     echo "Error: Failed to extract the plugin. Exiting."
     exit 1
 fi
+
+folder_plugin=$(echo $nagios_plugin | sed 's/\.tar\.gz//')
 
 cd $folder_plugin
 if [[ ! -f ./configure ]]; then
