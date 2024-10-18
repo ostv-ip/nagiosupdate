@@ -832,11 +832,15 @@ else
     # Check if the download was successful
     if [ $? -eq 0 ]; then
         echo "${txtgrn}Nagios Plugin version $target_version has been downloaded successfully.${txtrst}"
+        
+        # Continue with the installation if the download was successful
+        nagiosplugin_centos_update
     else
         echo "${txtred}Failed to download Nagios Plugin version $target_version from official source.${txtrst}"
         
         # Fallback to alternate download source
         echo "${txtylw}I will install Nagios Plugins version $target_version from an alternate source.${txtrst}"
+        
         while true; do
             echo
             read -p "Are you sure you want to continue (y/n)? " answer
@@ -846,6 +850,7 @@ else
                     sleep 2
                     wget -q --no-check-certificate 'https://archive.org/details/nagios-plugins-2.4.12.tar' -O nagios-plugins-2.4.12.tar.gz
                     echo "${txtgrn}Nagios Plugin version $target_version has been downloaded from the alternate source.${txtrst}"
+                    
                     # Call your installation function here
                     nagiosplugin_233
                     break
