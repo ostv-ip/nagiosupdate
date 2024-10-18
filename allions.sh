@@ -832,21 +832,21 @@ cp -r /usr/local/nagios /usr/local/nagios-backup/
 
 # Fetch the latest version from the Nagios Plugins website
 wget -q --no-check-certificate https://nagios-plugins.org/download/
-cat index.html | grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | head -n 1 > latest_plugin.txt
+cat index.html | grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | grep -v 'docs' | head -n 1 > latest_plugin.txt
 
 # Read the latest plugin version
-nagios_plugin=`cat latest_plugin.txt`
+nagios_plugin=$(cat latest_plugin.txt)
 
-# Ensure it is not a documentation file
-if [[ "$nagios_plugin" == *"docs"* ]]; then
-    echo "Error: Found a docs file instead of a plugin file. Exiting."
+# Ensure it is a valid plugin file, not docs
+if [[ "$nagios_plugin" == "" ]]; then
+    echo "Error: No valid plugin file found. Exiting."
     exit 1
 fi
 
-folder_plugin=`echo $nagios_plugin | sed -e 's/.tar.gz//g'`
+folder_plugin=$(echo $nagios_plugin | sed -e 's/.tar.gz//g')
 
 # Display the version and proceed
-version=`echo $nagios_plugin | sed 's/nagios-plugins-//' | sed 's/\.tar\.gz//'`
+version=$(echo $nagios_plugin | sed 's/nagios-plugins-//' | sed 's/\.tar\.gz//')
 echo "Latest version of Nagios plugin is $version"
 sleep 2
 
