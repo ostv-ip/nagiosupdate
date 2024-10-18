@@ -815,36 +815,67 @@ echo "${txtylw}Search latest version of Nagios Plugins.${txtrst}"
 echo "${txtylw}Please wait a minute ...${txtrst}"
 sleep 3
 
-wget -q --no-check-certificate https://nagios-plugins.org/download/
-cat index.html | grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | grep -v 'docs' | head -n 1 > latest_plugin.txt
+#!/bin/bash
 
-size=`ls -al latest_plugin.txt | awk '{print $5}'`
-
-version=`cat latest_plugin.txt | sed 's/.*-//' | sed 's/\.tar\.gz//'`
-
-echo
-
-############ if fails to find the last version, download version 2.4.11 ################
-nagios_plugin=`cat latest_plugin.txt`
-folder_plugin=`echo $nagios_plugin | sed -e 's/.tar.gz//g'` 2> /dev/null
-echo "${txtcyn}Latest version of Nagios plugin is $version${txtrst}"
-sleep 2
-echo
-echo "${txtylw}I will Download the latest version of Nagios Plugins${txtrst}"; sleep 2; echo
-cd $path
-wget --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
-sleep 2
-echo
-
-count=`ls -1 nagios-plugins-[0-9]*.tar.gz 2>/dev/null | wc -l`
-if [ $count != 0 ]
-then
-        tar -zxvf $nagios_plugin
-        cd $folder_plugin
-        ./configure
-        make
-        make install
+echo "Are you sure you want to update your Nagios Plugins (y/n)?"
+read confirm
+if [[ "$confirm" != "y" ]]; then
+    echo "Update cancelled."
+    exit 1
 fi
+
+echo "Okay, I will upgrade your nagios plugins version to the latest version."
+echo "I will backup your nagios to /usr/local/nagios-backup."
+# Backup existing Nagios installation (assuming Nagios is installed in /usr/local/nagios)
+mkdir -p /usr/local/nagios-backup
+cp -r /usr/local/nagios /usr/local/nagios-backup/
+
+# Fetch the latest version from the Nagios Plugins website
+wget -q --no-check-certificate https://nagios-plugins.org/download/
+cat index.html | grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | head -n 1 > latest_plugin.txt
+
+# Read the latest plugin version
+nagios_plugin=`cat latest_plugin.txt`
+
+# Ensure it is not a documentation file
+if [[ "$nagios_plugin" == *"docs"* ]]; then
+    echo "Error: Found a docs file instead of a plugin file. Exiting."
+    exit 1
+fi
+
+folder_plugin=`echo $nagios_plugin | sed -e 's/.tar.gz//g'`
+
+# Display the version and proceed
+version=`echo $nagios_plugin | sed 's/nagios-plugins-//' | sed 's/\.tar\.gz//'`
+echo "Latest version of Nagios plugin is $version"
+sleep 2
+
+echo "I will download the latest version of Nagios Plugins."
+cd /tmp
+wget --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
+if [[ $? -ne 0 ]]; then
+    echo "Failed to download the plugin. Exiting."
+    exit 1
+fi
+
+# Extract and install the plugin
+tar -zxvf $nagios_plugin
+if [[ $? -ne 0 ]]; then
+    echo "Error: Failed to extract the plugin. Exiting."
+    exit 1
+fi
+
+cd $folder_plugin
+if [[ ! -f ./configure ]]; then
+    echo "Error: ./configure not found. Exiting."
+    exit 1
+fi
+
+./configure
+make
+make install
+
+echo "Nagios Plugins have been successfully updated to version $version."
 }
 
 
