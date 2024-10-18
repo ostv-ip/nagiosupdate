@@ -816,7 +816,7 @@ echo "${txtylw}Please wait a minute ...${txtrst}"
 sleep 3
 
 wget -q --no-check-certificate https://nagios-plugins.org/download/
-cat index.html | grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | head -n 1 > latest_plugin.txt
+cat index.html | grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | grep -v 'docs' | head -n 1 > latest_plugin.txt
 
 size=`ls -al latest_plugin.txt | awk '{print $5}'`
 
@@ -824,7 +824,7 @@ version=`cat latest_plugin.txt | sed 's/.*-//' | sed 's/\.tar\.gz//'`
 
 echo
 
-############ if fails to find the last version, download version 2.4.16 ################
+############ if fails to find the last version, download version 2.4.11 ################
 nagios_plugin=`cat latest_plugin.txt`
 folder_plugin=`echo $nagios_plugin | sed -e 's/.tar.gz//g'` 2> /dev/null
 echo "${txtcyn}Latest version of Nagios plugin is $version${txtrst}"
@@ -836,15 +836,15 @@ wget --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
 sleep 2
 echo
 
-count=`ls -1 nagios-plugins-[0-9]*.tar.gz  2>/dev/null | wc -l`
+count=`ls -1 nagios-plugins-[0-9]*.tar.gz 2>/dev/null | wc -l`
 if [ $count != 0 ]
 then
-        sleep 3
-        echo
-        nagiosplugin_centos_update
+        tar -zxvf $nagios_plugin
+        cd $folder_plugin
+        ./configure
+        make
+        make install
 fi
-
-
 }
 
 
