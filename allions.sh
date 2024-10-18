@@ -868,34 +868,6 @@ else
 }
 # Continue with the installation if the download was successful
 # (Assuming you have an installation function defined)
-nagiosplugin_centos_update
-else
-        echo ${txtred}I detected there is a problem when I want to download latest Nagios Plugins version from official web.${txtrst}
-        sleep 2
-        echo ${txtylw}I will install Nagios Plugins version 2.4.12 from another source.${txtrst}
-
-        while true
-        do
-        echo
-        read -p "Are you sure want to continue (y/n)? " answer
-        case $answer in
-                [yY]* ) echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.12${txtrst}"
-                        sleep 2
-                                cd $path;wget --no-check-certificate 'https://archive.org/details/nagios-plugins-2.4.12.tar' -O nagios-plugins-2.4.12.tar.gz 2> /dev/null
-                                echo "${txtgrn}Nagios Plugin version 2.4.12 has been download and we will install it to your server${txtrst}"
-                                sleep 2
-                                nagiosplugin_233
-                break;;
-                [nN]* ) sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log*
-                        thankyou
-                break;;
-                * )     echo "Just enter Y or N, please.";;
-        esac
-done
-fi
-}
-
-
 
 
 install_centos() {
