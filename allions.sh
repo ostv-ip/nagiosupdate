@@ -816,11 +816,11 @@ echo "${txtylw}Please wait a minute ...${txtrst}"
 sleep 3
 
 wget -q --no-check-certificate https://nagios-plugins.org/download/
-cat index.html | grep plugins | grep -v sha1 | head -n 1 | sed 's/.*href=//' | sed 's/class.*//' | sed 's/\"\>.*//' | awk -F\> '{print $1}' | sed '1s/^.//' | sed '$ s/.$//' > latest_plugin.txt
+cat index.html | grep plugins | grep -v 'sha1' | grep -v 'nagios-plugins-docs.tar.gz' | head -n 1 | sed 's/.*href=//' | sed 's/class.*//' | sed 's/\"\>.*//' | awk -F\> '{print $1}' | sed '1s/^.//' | sed '$ s/.$//' > latest_plugin.txt
 
 size=`ls -al latest_plugin.txt | awk '{print $5}'`
 
-version=`cat latest_plugin.txt |  sed 's/.*-//' | sed 's/t.*//' | sed 's/.$//'`
+version=`cat latest_plugin.txt | sed 's/.*-//' | sed 's/t.*//' | sed 's/.$//'`
 
 echo
 
@@ -831,7 +831,8 @@ echo "${txtcyn}Latest version of Nagios plugin is $version${txtrst}"
 sleep 2
 echo
 echo "${txtylw}I will Download the latest version of Nagios Plugins${txtrst}";sleep 2;echo
-cd $path;wget --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
+cd $path
+wget --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
 sleep 2
 echo
 
@@ -841,31 +842,8 @@ then
         sleep 3
         echo
         nagiosplugin_centos_update
-
-else
-        echo ${txtred}I detected there is a problem when I want to download latest Nagios Plugins version from official web.${txtrst}
-        sleep 2
-        echo ${txtylw}I will install Nagios Plugins version 2.4.11 from another source.${txtrst}
-
-        while true
-        do
-        echo
-        read -p "Are you sure want to continue (y/n)? " answer
-        case $answer in
-                [yY]* ) echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.11${txtrst}"
-                        sleep 2
-                                cd $path;wget --no-check-certificate 'https://archive.org/details/nagios-plugins-2.4.11.tar' -O nagios-plugins-2.4.11.tar.gz 2> /dev/null
-                                echo "${txtgrn}Nagios Plugin version 2.4.11 has been download and we will install it to your server${txtrst}"
-                                sleep 2
-                                nagiosplugin_2411
-                break;;
-                [nN]* ) sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log*
-                        thankyou
-                break;;
-                * )     echo "Just enter Y or N, please.";;
-        esac
-done
 fi
+
 }
 
 
