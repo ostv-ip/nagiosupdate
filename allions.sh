@@ -831,23 +831,21 @@ mkdir -p /usr/local/nagios-backup
 cp -r /usr/local/nagios /usr/local/nagios-backup/
 
 # Fetch the latest version from the Nagios Plugins website
-wget -q --no-check-certificate https://nagios-plugins.org/download/
-cat index.html | grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | grep -v 'docs' | head -n 1 > latest_plugin.txt
+wget -q --no-check-certificate https://nagios-plugins.org/download/ -O index.html
 
-# Read the latest plugin version
-nagios_plugin=$(cat latest_plugin.txt)
+# Filter the HTML content for plugin files (excluding docs) and get the latest version
+nagios_plugin=$(grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' index.html | grep -v 'docs' | sort -V | tail -n 1)
 
-# Ensure it is a valid plugin file, not docs
+# Check if a valid plugin was found
 if [[ "$nagios_plugin" == "" ]]; then
-    echo "Error: No valid plugin file found. Exiting."
+    echo "Error: Could not find a valid Nagios plugin version."
     exit 1
 fi
 
-folder_plugin=$(echo $nagios_plugin | sed -e 's/.tar.gz//g')
-
-# Display the version and proceed
+# Extract the version number
 version=$(echo $nagios_plugin | sed 's/nagios-plugins-//' | sed 's/\.tar\.gz//')
-echo "Latest version of Nagios plugin is $version"
+
+echo "Latest Nagios Plugins version is $version."
 sleep 2
 
 echo "I will download the latest version of Nagios Plugins."
