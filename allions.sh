@@ -865,7 +865,7 @@ else
             esac
         done
     fi
-fi
+}
 # Continue with the installation if the download was successful
 # (Assuming you have an installation function defined)
 nagiosplugin_centos_update
