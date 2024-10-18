@@ -816,33 +816,34 @@ echo "${txtylw}Please wait a minute ...${txtrst}"
 sleep 3
 
 wget -q --no-check-certificate https://nagios-plugins.org/download/
-cat index.html | grep plugins | grep -v 'sha1' | grep -v 'nagios-plugins-docs.tar.gz' | head -n 1 | sed 's/.*href=//' | sed 's/class.*//' | sed 's/\"\>.*//' | awk -F\> '{print $1}' | sed '1s/^.//' | sed '$ s/.$//' > latest_plugin.txt
+cat index.html | grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' | head -n 1 > latest_plugin.txt
 
 size=`ls -al latest_plugin.txt | awk '{print $5}'`
 
-version=`cat latest_plugin.txt | sed 's/.*-//' | sed 's/t.*//' | sed 's/.$//'`
+version=`cat latest_plugin.txt | sed 's/.*-//' | sed 's/\.tar\.gz//'`
 
 echo
 
-############ if fails to find the last version, download version 2.4.11 ################
+############ if fails to find the last version, download version 2.4.16 ################
 nagios_plugin=`cat latest_plugin.txt`
 folder_plugin=`echo $nagios_plugin | sed -e 's/.tar.gz//g'` 2> /dev/null
 echo "${txtcyn}Latest version of Nagios plugin is $version${txtrst}"
 sleep 2
 echo
-echo "${txtylw}I will Download the latest version of Nagios Plugins${txtrst}";sleep 2;echo
+echo "${txtylw}I will Download the latest version of Nagios Plugins${txtrst}"; sleep 2; echo
 cd $path
 wget --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
 sleep 2
 echo
 
-count=`ls -1 nagios-plugin*.tar.gz  2>/dev/null | wc -l`
+count=`ls -1 nagios-plugins-[0-9]*.tar.gz  2>/dev/null | wc -l`
 if [ $count != 0 ]
 then
         sleep 3
         echo
         nagiosplugin_centos_update
 fi
+
 
 }
 
