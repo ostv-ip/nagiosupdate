@@ -815,59 +815,58 @@ echo "${txtylw}Search latest version of Nagios Plugins.${txtrst}"
 echo "${txtylw}Please wait a minute ...${txtrst}"
 sleep 3
 
-# Define the version to download
-target_version="2.4.12"
-plugin_file="nagios-plugins-$target_version.tar.gz"
-url="https://nagios-plugins.org/download/$plugin_file"
+wget -q --no-check-certificate https://nagios-plugins.org/download/
+cat index.html | grep plugins | grep -v sha1 | head -n 1 | sed 's/.*href=//' | sed 's/class.*//' | sed 's/\"\>.*//' | awk -F\> '{print $1}' | sed '1s/^.//' | sed '$ s/.$//' > latest_plugin.txt
 
-# Check if the file already exists
-if [ -f "$plugin_file" ]; then
-    echo "${txtgrn}Nagios Plugin version $target_version already exists. Skipping download.${txtrst}"
-else
-    echo "Okay, I will download Nagios Plugins version $target_version."
-    
-    # Attempt to download the specified version
-    wget -q --no-check-certificate "$url"
-    
-    # Check if the download was successful
-    if [ $? -eq 0 ]; then
-        echo "${txtgrn}Nagios Plugin version $target_version has been downloaded successfully.${txtrst}"
-        
-        # Call your update function here
+size=`ls -al latest_plugin.txt | awk '{print $5}'`
+
+version=`cat latest_plugin.txt |  sed 's/.*-//' | sed 's/t.*//' | sed 's/.$//'`
+
+echo
+
+############ if fails to find the last version, download version 2.3.3 ################
+nagios_plugin=`cat latest_plugin.txt`
+folder_plugin=`echo $nagios_plugin | sed -e 's/.tar.gz//g'` 2> /dev/null
+echo "${txtcyn}Latest version of Nagios plugin is $version${txtrst}"
+sleep 2
+echo
+echo "${txtylw}I will Download the latest version of Nagios Plugins${txtrst}";sleep 2;echo
+cd $path;wget --no-check-certificate https://nagios-pluginas.org/download/$nagios_plugin
+sleep 2
+echo
+
+count=`ls -1 nagios-plugin*.tar.gz  2>/dev/null | wc -l`
+if [ $count != 0 ]
+then
+        sleep 3
+        echo
         nagiosplugin_centos_update
-    else
-        echo "${txtred}Failed to download Nagios Plugin version $target_version from official source.${txtrst}"
-        
-        # Fallback to alternate download source
-        echo "${txtylw}I will install Nagios Plugins version $target_version from an alternate source.${txtrst}"
-        
-        while true; do
-            echo
-            read -p "Are you sure you want to continue (y/n)? " answer
-            case $answer in
-                [yY]* )
-                    echo "${txtpur}Okay, I will install Nagios Plugins version $target_version${txtrst}"
-                    sleep 2
-                    wget -q --no-check-certificate 'https://archive.org/details/nagios-plugins-2.4.12.tar' -O nagios-plugins-2.4.12.tar.gz
-                    echo "${txtgrn}Nagios Plugin version $target_version has been downloaded from the alternate source.${txtrst}"
-                    
-                    # Call your installation function here
-                    nagiosplugin_233
-                    break
-                    ;;
-                [nN]* )
-                    echo "Installation cancelled."
-                    exit 0
-                    ;;
-                * )
-                    echo "Just enter Y or N, please."
-                    ;;
-            esac
-        done
-    fi
+
+else
+        echo ${txtred}I detected there is a problem when I want to download latest Nagios Plugins version from official web.${txtrst}
+        sleep 2
+        echo ${txtylw}I will install Nagios Plugins version 2.3.3 from another source.${txtrst}
+
+        while true
+        do
+        echo
+        read -p "Are you sure want to continue (y/n)? " answer
+        case $answer in
+                [yY]* ) echo "${txtpur}Okay, I will install Nagios Plugins version 2.3.3${txtrst}"
+                        sleep 2
+                                cd $path;wget --no-check-certificate 'https://archive.org/details/nagios-plugins-2.3.3.tar' -O nagios-plugins-2.3.3.tar.gz 2> /dev/null
+                                echo "${txtgrn}Nagios Plugin version 2.3.3 has been download and we will install it to your server${txtrst}"
+                                sleep 2
+                                nagiosplugin_233
+                break;;
+                [nN]* ) sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log*
+                        thankyou
+                break;;
+                * )     echo "Just enter Y or N, please.";;
+        esac
+done
+fi
 }
-# Continue with the installation if the download was successful
-# (Assuming you have an installation function defined)
 
 
 install_centos() {
