@@ -830,15 +830,21 @@ echo "I will backup your nagios to /usr/local/nagios-backup."
 mkdir -p /usr/local/nagios-backup
 cp -r /usr/local/nagios /usr/local/nagios-backup/
 
-# Fetch the latest version from the Nagios Plugins website
+# Download the index page and look for valid plugin files (excluding docs)
 wget -q --no-check-certificate https://nagios-plugins.org/download/ -O index.html
 
-# Filter the HTML content for plugin files (excluding docs) and get the latest version
+# Filter for the correct Nagios plugin files (strictly exclude docs)
 nagios_plugin=$(grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' index.html | grep -v 'docs' | sort -V | tail -n 1)
 
 # Check if a valid plugin was found
 if [[ "$nagios_plugin" == "" ]]; then
     echo "Error: Could not find a valid Nagios plugin version."
+    exit 1
+fi
+
+# Ensure the file is not a docs file (additional precaution)
+if echo "$nagios_plugin" | grep -q 'docs'; then
+    echo "Error: Detected docs file instead of a plugin file. Exiting."
     exit 1
 fi
 
@@ -846,25 +852,6 @@ fi
 version=$(echo $nagios_plugin | sed 's/nagios-plugins-//' | sed 's/\.tar\.gz//')
 
 echo "Latest Nagios Plugins version is $version."
-sleep 2
-
-echo "I will download the latest version of Nagios Plugins."
-cd /tmp
-wget -q --no-check-certificate https://nagios-plugins.org/download/ -O index.html
-
-# Filter for the correct Nagios plugin files and exclude docs
-nagios_plugin=$(grep -Eo 'nagios-plugins-[0-9]+\.[0-9]+\.[0-9]+\.tar\.gz' index.html | grep -v 'docs' | sort -V | tail -n 1)
-
-# Check if a valid plugin was found
-if [[ "$nagios_plugin" == "" ]]; then
-    echo "Error: Could not find a valid Nagios plugin version."
-    exit 1
-fi
-
-# Extract the version number
-version=$(echo $nagios_plugin | sed 's/nagios-plugins-//' | sed 's/\.tar\.gz//')
-
-echo "Latest Nagios Plugins version is $version"
 sleep 2
 
 echo "I will download the latest version of Nagios Plugins."
