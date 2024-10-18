@@ -833,7 +833,7 @@ else
     if [ $? -eq 0 ]; then
         echo "${txtgrn}Nagios Plugin version $target_version has been downloaded successfully.${txtrst}"
         
-        # Continue with the installation if the download was successful
+        # Call your update function here
         nagiosplugin_centos_update
     else
         echo "${txtred}Failed to download Nagios Plugin version $target_version from official source.${txtrst}"
@@ -865,7 +865,7 @@ else
             esac
         done
     fi
-}
+fi
 # Continue with the installation if the download was successful
 # (Assuming you have an installation function defined)
 nagiosplugin_centos_update
