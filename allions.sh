@@ -1003,7 +1003,7 @@ echo "${txtylw}Search latest version of Nagios Plugins.${txtrst}"
 echo "${txtylw}Please wait a minute ...${txtrst}"
 sleep 3
 
-wget -q --no-check-certificate https://nagios-plugins.org/download/
+wget -q --no-check-certificate https://api.github.com/repos/nagios-plugins/nagios-plugins/releases/latest/
 cat index.html | grep plugins | grep -v sha1 | head -n 1 | sed 's/.*href=//' | sed 's/class.*//' | sed 's/\"\>.*//' | awk -F\> '{print $1}' | sed '1s/^.//' | sed '$ s/.$//' > latest_plugin.txt
 
 size=`ls -al latest_plugin.txt | awk '{print $5}'`
@@ -1019,7 +1019,7 @@ echo "${txtcyn}Latest version of Nagios plugin is $version${txtrst}"
 sleep 2
 echo
 echo "${txtylw}I will Download the latest version of Nagios Plugins${txtrst}";sleep 2;echo
-cd $path;wget --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
+cd $path;wget --no-check-certificate https://api.github.com/repos/nagios-plugins/nagios-plugins/releases/latest/$nagios_plugin
 sleep 2
 echo
 
@@ -1366,7 +1366,7 @@ cd ..;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugi
 
 
 check_latest_plugin () {
-wget -q --no-check-certificate https://nagios-plugins.org/download/
+wget -q --no-check-certificate https://api.github.com/repos/nagios-plugins/nagios-plugins/releases/latest/
 cat index.html | grep plugins | grep -v sha1 | head -n 1 | sed 's/.*href=//' | sed 's/class.*//' | sed 's/\"\>.*//' | awk -F\> '{print $1}' | sed '1s/^.//' | sed '$ s/.$//' > latest_plugin.txt
 
 size=`ls -al latest_plugin.txt | awk '{print $5}'`
@@ -1409,7 +1409,7 @@ then
                         read -n 1 -s -r;echo;sleep 2
                         echo "${txtcyn}Latest version of Nagios Plugins is `echo $plugin_latest_version` version${txtrst}"
                         echo "${txtylw}I will Download the latest version of Nagios Plugins${txtrst}";sleep 2;echo
-                        cd $path;wget  --no-check-certificate https://nagios-plugins.org/download/$nagios_plugin
+                        cd $path;wget  --no-check-certificate https://api.github.com/repos/nagios-plugins/nagios-plugins/releases/latest/$nagios_plugin
                         count=`ls -1 nagios* 2>/dev/null | wc -l `
                         if [ $count != 0 ]
                                 then
@@ -1488,7 +1488,7 @@ cp -rp /usr/local/nagios /usr/local/nagios-backup
 echo
 echo "${txtpur}Okay, I will download Nagios Plugins latest version.${txtrst}"
 sleep 2
-cd upgrade-plugin 2>/dev/null;wget  --no-check-certificate https://nagios-plugins.org/download/`cat latest_plugin.txt`
+cd upgrade-plugin 2>/dev/null;wget  --no-check-certificate https://api.github.com/repos/nagios-plugins/nagios-plugins/releases/latest/`cat latest_plugin.txt`
 count=`ls -1 nagios-plugin*.tar.gz  2>/dev/null | wc -l`
 if [ $count != 0 ]
 then
@@ -1557,7 +1557,7 @@ fi
 check_upgrade_plugin () {
 echo;echo
 echo "${txtpur}Check Nagios Plugins version${txtrst}"
-   wget -q --no-check-certificate https://nagios-plugins.org/download/
+   wget -q --no-check-certificate https://api.github.com/repos/nagios-plugins/nagios-plugins/releases/latest/
    cat index.html | grep plugins | grep -v sha1 | head -n 1 | sed 's/.*href=//' | sed 's/class.*//' | sed 's/\"\>.*//' | awk -F\> '{print $1}' | sed '1s/^.//' | sed '     $ s/.$//' > latest_plugin.txt
    latest_plugin=`cat latest_plugin.txt | sed 's/.*-//' | sed 's/t.*//' | sed 's/.$//'`
    existing_plugin=`/usr/local/nagios/lib*/check_ssh -V | awk '{print $2}' | sed 's/^.//'`
