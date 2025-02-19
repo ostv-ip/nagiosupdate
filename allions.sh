@@ -228,21 +228,21 @@ echo
 
 
 
-nagiosplugin_2411() {
+nagiosplugin_2412() {
 echo
 echo "${txtylw}Extract package Nagios plugins${txtrst}"
 sleep 2
-tar -zxvf nagios-plugins-2.4.11.tar.gz;check
+tar -zxvf nagios-plugins-2.4.12.tar.gz;check
 echo "Extract package Nagios plugins successfully" 2> /dev/null  >> $log
 echo "${txtgrn}Done${txtrst}"
 sleep 2
 echo
 echo
-echo "${txtylw}Compile Nagios plugins version 2.4.11${txtrst}"
+echo "${txtylw}Compile Nagios plugins version 2.4.12${txtrst}"
 sleep 2
-cd nagios-plugins-2.4.11;
+cd nagios-plugins-2.4.12;
 ./configure --with-nagios-user=nagios --with-nagios-group=nagios;check;echo;sleep1;make;check;echo;sleep1;make install;check;echo;sleep 1;
-echo "Compile Nagios plugins version 2.4.11 successfully" 2> /dev/null  >> $log
+echo "Compile Nagios plugins version 2.4.12 successfully" 2> /dev/null  >> $log
 echo "${txtgrn}Done${txtrst}"
 sleep 2
 echo
@@ -854,10 +854,10 @@ else
         case $answer in
                 [yY]* ) echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.12${txtrst}"
                         sleep 2
-                                cd $path;wget --no-check-certificate 'https://nagios-plugins.org/download/nagios-plugins-2.4.12.tar.gz' -O nagios-plugins-2.4.12.tar.gz 2> /dev/null
+                                cd $path;wget --no-check-certificate 'https://github.com/nagios-plugins/nagios-plugins/releases/download/release-2.4.12/nagios-plugins-2.4.12.tar.gz' -O nagios-plugins-2.4.12.tar.gz 2> /dev/null
                                 echo "${txtgrn}Nagios Plugin version 2.4.12 has been download and we will install it to your server${txtrst}"
                                 sleep 2
-                                nagiosplugin_233
+                                nagiosplugin_2412
                 break;;
                 [nN]* ) sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log*
                         thankyou
@@ -1012,7 +1012,7 @@ version=`cat latest_plugin.txt |  sed 's/.*-//' | sed 's/t.*//' | sed 's/.$//'`
 
 echo
 
-############ if fails to find the last version, download version 2.4.11 ################
+############ if fails to find the last version, download version 2.4.12 ################
 nagios_plugin=`cat latest_plugin.txt`
 folder_plugin=`echo $nagios_plugin | sed -e 's/.tar.gz//g'` 2> /dev/null
 echo "${txtcyn}Latest version of Nagios plugin is $version${txtrst}"
@@ -1033,19 +1033,19 @@ then
 else
         echo ${txtred}I detected there is a problem when I want to download latest Nagios Plugins version from official web.${txtrst}
         sleep 2
-        echo ${txtylw}I will install Nagios Plugins version 2.4.11 from another source.${txtrst}
+        echo ${txtylw}I will install Nagios Plugins version 2.4.12 from another source.${txtrst}
 
         while true
         do
                 echo
                 read -p "Are you sure want to continue (y/n)? " answer
                 case $answer in
-                     [yY]* )    echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.11${txtrst}"
+                     [yY]* )    echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.12${txtrst}"
                                 sleep 2
-                                cd $path;wget --no-check-certificate 'https://archive.org/details/nagios-plugins-2.4.11.tar' -O nagios-plugins-2.4.11.tar.gz 2> /dev/null
-                                echo "${txtgrn}Nagios Plugin version 2.4.11 has been download and we will install it to your server${txtrst}"
+                                cd $path;wget --no-check-certificate 'https://github.com/nagios-plugins/nagios-plugins/releases/download/release-2.4.12/nagios-plugins-2.4.12.tar.gz' -O nagios-plugins-2.4.12.tar.gz 2> /dev/null
+                                echo "${txtgrn}Nagios Plugin version 2.4.12 has been download and we will install it to your server${txtrst}"
                                 sleep 2
-                                nagiosplugin_2411
+                                nagiosplugin_2412
                                 break;;
                      [nN]* )    sleep 2;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log* httpd.txt
                                 thankyou
@@ -1311,22 +1311,22 @@ echo
 thankyou
 }
 
-nagiosplugin_centos_248 () {
+nagiosplugin_centos_2412 () {
 echo
 echo "${txtylw}Extract package Nagios plugins${txtrst}"
 sleep 2
-tar -zxvf nagios-plugins-2.4.11.tar.gz;check
+tar -zxvf nagios-plugins-2.4.12.tar.gz;check
 echo "Extract package Nagios plugins successfully" 2> /dev/null  >> $log
 echo "${txtgrn}Done${txtrst}"
 sleep 2
 echo
 echo
-echo "${txtylw}Compile Nagios plugins version 2.4.11${txtrst}"
+echo "${txtylw}Compile Nagios plugins version 2.4.12${txtrst}"
 sleep 2
-cd nagios-plugins-2.4.11;
+cd nagios-plugins-2.4.12;
 ./configure --with-nagios-user=nagios --with-nagios-group=nagios;check;echo;sleep1;make;check;echo;sleep1;make install;check;echo;sleep 1;
 echo "${txtgrn}Done${txtrst}"
-echo "Compile Nagios plugins version 2.4.11 successfully" 2> /dev/null  >> $log
+echo "Compile Nagios plugins version 2.4.12 successfully" 2> /dev/null  >> $log
 sleep 2
 echo
 echo
@@ -1418,20 +1418,20 @@ then
                         else
                         echo ${txtred}I detected there is a problem when download latest Nagios Plugins version in official website.${txtrst}
                         sleep 2
-                        echo ${txtylw}I will install Nagios Plugins version 2.4.11 from another source.${txtrst}
+                        echo ${txtylw}I will install Nagios Plugins version 2.4.12 from another source.${txtrst}
 
                          while true
                          do
                          echo
                          read -p "Are you sure want to continue (y/n)? " answer
                          case $answer in
-                                [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Plugins version 2.4.11${txtrst}"
+                                [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Plugins version 2.4.12${txtrst}"
                                         sleep 2
-                                        echo "${txtylw}Downloading Nagios Plugins version 2.4.11 ...${txtrst}"
-                                        cd $path;wget --no-check-certificate 'https://archive.org/details/nagios-plugins-2.4.11.tar/nagios-plugins-2.4.11.tar.gz' -O nagios-plugins-2.4.11.tar.gz
-                                        echo "${txtgrn}Nagios Plugins version 2.4.11 has been download and we will install it to your server${txtrst}"
+                                        echo "${txtylw}Downloading Nagios Plugins version 2.4.12 ...${txtrst}"
+                                        cd $path;wget --no-check-certificate 'https://github.com/nagios-plugins/nagios-plugins/releases/download/release-2.4.12/nagios-plugins-2.4.12.tar.gz' -O nagios-plugins-2.4.12.tar.gz
+                                        echo "${txtgrn}Nagios Plugins version 2.4.12 has been download and we will install it to your server${txtrst}"
                                         sleep 1
-                                        nagiosplugin_centos_248
+                                        nagiosplugin_centos_2412
                                 break;;
                                 [nN]* ) rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log* httpd.txt
                                         thankyou
@@ -1514,19 +1514,19 @@ then
 else
 sleep 2;echo ${txtred}I detected there is a problem when I want to download latest Nagios Plugins version from official web.${txtrst}
 sleep 2
-echo ${txtylw}I will install Nagios Plugins version 2.4.11 from another source.${txtrst}
+echo ${txtylw}I will install Nagios Plugins version 2.4.12 from another source.${txtrst}
 while true
 do
         echo
         read -p "Are you sure want to continue (y/n)? " answer
         case $answer in
-                [yY]* ) echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.11${txtrst}"
+                [yY]* ) echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.12${txtrst}"
                         sleep 2
-                        cd upgrade-plugin 2>/dev/null;wget --no-check-certificate 'https://archive.org/download/nagios-plugins-2.4.11.tar/nagios-plugins-2.4.11.tar.gz' -O nagios-plugins-2.4.11.tar.gz
-                        echo "${txtgrn}Nagios Plugin version 2.4.11 has been download and we will install it to your server${txtrst}"
+                        cd upgrade-plugin 2>/dev/null;wget --no-check-certificate 'https://github.com/nagios-plugins/nagios-plugins/releases/download/release-2.4.12/nagios-plugins-2.4.12.tar.gz' -O nagios-plugins-2.4.12.tar.gz
+                        echo "${txtgrn}Nagios Plugin version 2.4.12 has been download and we will install it to your server${txtrst}"
                         sleep 2
-                        tar -zxvf nagios-plugins-2.4.11.tar.gz
-                        cd nagios-plugins-2.4.11
+                        tar -zxvf nagios-plugins-2.4.12.tar.gz
+                        cd nagios-plugins-2.4.12
                         ./configure --with-nagios-user=nagios --with-nagios-group=nagios
                         make
                         make install
@@ -1537,7 +1537,7 @@ do
                         /usr/local/nagios/lib*/check_by_ssh -V | awk '{print $2}' | sed 's/^.//'
                         sleep 2
                         echo
-                        echo "${txtgrn}Your Nagios Plugins is version 2.4.11.${txtrst}"
+                        echo "${txtgrn}Your Nagios Plugins is version 2.4.12.${txtrst}"
                         cd ..;rm -rf index* latest_plugin.txt version.txt upgrade-nagios check_core.txt upgrade-nagios httpd.txt
                         echo
                         thankyou
@@ -2468,7 +2468,7 @@ echo "${txtgrn}Done${txtrst}"
 sleep 2
 echo
 echo "${txtylw}I will download Nagios Plugin${txtrst}"
-wget --no-check-certificate https://nagios-plugins.org/download/nagios-plugins-2.4.11.tar.gz
+wget --no-check-certificate https://nagios-plugins.org/download/nagios-plugins-2.4.12.tar.gz
 sleep 2
 echo "${txtgrn}Done${txtrst}"
 echo
@@ -2477,8 +2477,8 @@ if [ $count != 0 ]
 then
         sleep 2
         echo;echo "${txtgrn}Extract Nagios Plugin${txtrst}";sleep 2;echo
-        tar -zxvf nagios-plugins-2.4.11.tar.gz;check;sleep 2;echo "${txtgrn}Done${txtrst}"
-        cd nagios-plugins-2.4.11;sleep 2;echo;echo;./configure;check;echo;sleep 1;make;check;echo;sleep 1;make install;check;echo;sleep 1;
+        tar -zxvf nagios-plugins-2.4.12.tar.gz;check;sleep 2;echo "${txtgrn}Done${txtrst}"
+        cd nagios-plugins-2.4.12;sleep 2;echo;echo;./configure;check;echo;sleep 1;make;check;echo;sleep 1;make install;check;echo;sleep 1;
         sleep 2;echo;echo "${txtgrn}Done${txtrst}";echo
         download_nrpe_plugin
 
@@ -2487,22 +2487,22 @@ else
 
         echo ${txtred}I detected there is a problem when I want to download Nagios Plugins version from official web.${txtrst}
         sleep 2
-        echo ${txtylw}I will install Nagios Plugins version 2.4.11 from another source${txtrst}
+        echo ${txtylw}I will install Nagios Plugins version 2.4.12 from another source${txtrst}
 
         while true
         do
         echo
         read -p "Are you sure want to continue (y/n)? " answer
         case $answer in
-                [yY]* ) echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.11.${txtrst}"
+                [yY]* ) echo "${txtpur}Okay, I will install Nagios Plugins version 2.4.12.${txtrst}"
                         sleep 2
                         echo
                         echo "${txtylw}Downloading Nagios Plugins...${txtrst}";sleep 2;echo
-                        cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-plugins-2.4.11.tar/nagios-plugins-2.4.11.tar.gz' -O nagios-plugins-2.4.11.tar.gz
-                        echo "${txtgrn}Nagios Plugin version 2.4.11 has been download and we will install it to your server${txtrst}"
+                        cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-plugins-2.4.12.tar/nagios-plugins-2.4.12.tar.gz' -O nagios-plugins-2.4.12.tar.gz
+                        echo "${txtgrn}Nagios Plugin version 2.4.12 has been download and we will install it to your server${txtrst}"
                         sleep 2
-                        tar -zxvf nagios-plugins-2.4.11.tar.gz;check;sleep 2;echo "${txtgrn}Done${txtrst}"
-                        cd nagios-plugins-2.4.11;sleep 2;echo;echo;./configure;check;echo;sleep 1;make;check;echo;sleep 1;make install;check;echo;sleep 1;
+                        tar -zxvf nagios-plugins-2.4.12.tar.gz;check;sleep 2;echo "${txtgrn}Done${txtrst}"
+                        cd nagios-plugins-2.4.12;sleep 2;echo;echo;./configure;check;echo;sleep 1;make;check;echo;sleep 1;make install;check;echo;sleep 1;
                         sleep 2;echo;echo "${txtgrn}Done${txtrst}";echo
                         download_nrpe_plugin
 
