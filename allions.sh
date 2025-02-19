@@ -815,7 +815,7 @@ echo "${txtylw}Search latest version of Nagios Plugins.${txtrst}"
 echo "${txtylw}Please wait a minute ...${txtrst}"
 sleep 3
 
-wget -q --no-check-certificate https://nagios-pluginas.org/download/
+wget -q --no-check-certificate https://api.github.com/repos/nagios-plugins/nagios-plugins/releases/latest/
 cat index.html | grep plugins | grep -v sha1 | head -n 1 | sed 's/.*href=//' | sed 's/class.*//' | sed 's/\"\>.*//' | awk -F\> '{print $1}' | sed '1s/^.//' | sed '$ s/.$//' > latest_plugin.txt
 
 size=`ls -al latest_plugin.txt | awk '{print $5}'`
@@ -831,7 +831,7 @@ echo "${txtcyn}Latest version of Nagios plugin is $version${txtrst}"
 sleep 2
 echo
 echo "${txtylw}I will Download the latest version of Nagios Plugins${txtrst}";sleep 2;echo
-cd $path;wget --no-check-certificate https://nagios-pluginas.org/download/$nagios_plugin
+cd $path;wget --no-check-certificate https://api.github.com/repos/nagios-plugins/nagios-plugins/releases/latest/$nagios_plugin
 sleep 2
 echo
 
@@ -2468,7 +2468,7 @@ echo "${txtgrn}Done${txtrst}"
 sleep 2
 echo
 echo "${txtylw}I will download Nagios Plugin${txtrst}"
-wget --no-check-certificate https://nagios-plugins.org/download/nagios-plugins-2.4.12.tar.gz
+wget --no-check-certificate https://github.com/nagios-plugins/nagios-plugins/releases/download/release-2.4.12/nagios-plugins-2.4.12.tar.gz
 sleep 2
 echo "${txtgrn}Done${txtrst}"
 echo
@@ -2498,7 +2498,7 @@ else
                         sleep 2
                         echo
                         echo "${txtylw}Downloading Nagios Plugins...${txtrst}";sleep 2;echo
-                        cd $path;wget --no-check-certificate 'https://archive.org/download/nagios-plugins-2.4.12.tar/nagios-plugins-2.4.12.tar.gz' -O nagios-plugins-2.4.12.tar.gz
+                        cd $path;wget --no-check-certificate 'https://github.com/nagios-plugins/nagios-plugins/releases/download/release-2.4.12/nagios-plugins-2.4.12.tar.gz' -O nagios-plugins-2.4.12.tar.gz
                         echo "${txtgrn}Nagios Plugin version 2.4.12 has been download and we will install it to your server${txtrst}"
                         sleep 2
                         tar -zxvf nagios-plugins-2.4.12.tar.gz;check;sleep 2;echo "${txtgrn}Done${txtrst}"
