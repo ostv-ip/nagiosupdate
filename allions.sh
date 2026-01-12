@@ -1604,7 +1604,73 @@ echo "${txtpur}Check Nagios Plugins version${txtrst}"
                         done
                 fi
 }
-html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt rpm_nagios.txt upgrade-nagios check_latest_core.txt latest_core.txt check_latest_core.txt check_core.txt targz.txt wget-log* httpd.txt
+
+
+
+
+upgrade_nagios_suse() {
+
+echo "${txtpur}Check Nagios Core Version${txtrst}"
+
+core_existing_version=`/usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' |  sed s/.$//`
+
+
+echo
+echo "${txtylw}I will check existing nagios version in your server. Please wait a minute ...${txtrst}";sleep 2
+sleep 2
+echo "${txtcyn}Your Nagios version is $core_existing_version"${txtrst}
+echo;sleep 2
+
+
+mkdir upgrade-nagios 2> /dev/null;wget --no-check-certificate -q https://www.nagios.org/downloads/nagios-core/thanks/?t=1504034794 2> /dev/null
+
+latest_nagios=`cat index.html* 2>/dev/null  | grep "assets.nagios.com/downloads/nagioscore/releases" | sed -n '1p' | awk '{print $6}' | sed -e 's/<[^()]*>//g' | sed -e 's/\/[^()]*\///g' | sed -e 's/\"[^()]*\">//g' | sed -e 's/href=//g' `
+version=`echo $latest_nagios | sed 's/.*-//' | sed 's/t.*//' | sed 's/.$//'`
+
+echo $latest_nagios | grep tar.gz > check_core.txt
+core=`ls -al | grep check_core.txt | awk '{print $5}'`
+
+
+if [ $core -eq 0 ]
+then
+         sleep 2
+         echo ${txtred}I am sorry, I can not check the latest version from the official web because there is a problem.${txtrst}
+         sleep 2
+         echo
+         echo ${txtylw}I will install Nagios Core version 4.5.10 from another source.${txtrst}
+         while true
+         do
+                         sleep 2
+                         echo
+                         read -p "Are you sure want to continue (y/n)? " answer
+                         case $answer in
+                         [yY]* ) echo;echo "${txtpur}Okay, I will download Nagios Core version 4.5.10${txtrst}"
+                                 sleep 2
+                                 echo "${txtylw}Downloading Nagios Core version 4.5.10 ... ${txtrst}"
+                                 cd upgrade-nagios;wget --no-check-certificate 'https://assets.nagios.com/downloads/nagioscore/releases/nagios-4.5.10.tar.gz' -O nagios-4.5.10.tar.gz
+                                 echo "${txtgrn}Nagios Core version 4.5.10 has been download and we will install it to your server${txtrst}"
+                                 tar -zxvf nagios-4.5.10.tar.gz
+                                 cd nagios-4.5.10
+                                 ./configure --with-httpd-conf=/etc/apache2/vhosts.d
+                                 make all
+                                 make install
+                                 make install-daemoninit
+                                 systemctl start nagios
+                                 echo
+                                 echo "${txtpur}Checking Nagios Core version ${txtrst}"
+                                 sleep 2
+                                 /usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' |  sed s/.$//
+                                 echo
+                                 echo "${txtylw}Your Nagios Core version is 4.5.10${txtrst}"
+                                 echo
+                                 sleep 2
+                                 echo
+                                 check_upgrade_plugin
+                                 echo
+                                 sleep 2
+                                 thankyou
+                                 sleep 2
+                                 sleep 2;cd ..;rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt rpm_nagios.txt upgrade-nagios check_latest_core.txt latest_core.txt check_latest_core.txt check_core.txt targz.txt wget-log* httpd.txt
                                  exit
                                  break;;
                          [nN]* ) sleep 2;echo;check_upgrade_plugin;
