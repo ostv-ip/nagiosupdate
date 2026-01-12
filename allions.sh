@@ -100,7 +100,7 @@ echo "#############################################################"
 echo ""
 echo ""
 cd $path
-rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios_cfg.txt rpm_nagios.txt nagios_folder.txt targz.txt wget-log* 2>/dev/null
+rm -rf index_latest.html latest* latest_year.txt nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios_cfg.txt rpm_nagios.txt nagios_folder.txt targz.txt wget-log* httpd.txt upgrade-nagios upgrade-plugin 2>/dev/null
 sleep 2
 }
 
@@ -141,7 +141,7 @@ echo "                     ${txtgrn}     ****** Thank You ****** ${txtrst}"
 echo
 
 cd $path
-rm -rf index_latest.html latest* nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log* 2>/dev/null
+rm -rf index_latest.html latest* nagplug.txt php.txt plugin1.txt plugin.txt result.txt reverse.txt index* php.txt year.txt version.txt check_nagios.txt rpm_nagios.txt rpm_nagios_cfg.txt targz.txt wget-log* upgrade-nagios upgrade-plugin 2>/dev/null
 exit 0
 }
 
@@ -191,7 +191,7 @@ sleep 1
 }
 
 ####################################################################
-#  Install Nagios Functions
+#  Install Nagios Plugin Function
 ####################################################################
 
 install_nagios_plugin() {
@@ -253,6 +253,10 @@ else
     stop
 fi
 }
+
+####################################################################
+#  Install Nagios Core Functions - CentOS/RHEL
+####################################################################
 
 nagioscore_centos() {
 echo "${txtylw}Downloading Nagios Core ${NAGIOS_VERSION}...${txtrst}"
@@ -323,6 +327,10 @@ else
 fi
 }
 
+####################################################################
+#  Install Nagios Core Functions - Ubuntu/Debian
+####################################################################
+
 nagioscore_ubuntu() {
 echo "${txtylw}Downloading Nagios Core ${NAGIOS_VERSION}...${txtrst}"
 sleep 2
@@ -391,6 +399,10 @@ else
     stop
 fi
 }
+
+####################################################################
+#  Install Nagios Core Functions - openSUSE
+####################################################################
 
 nagioscore_suse() {
 echo "${txtylw}Downloading Nagios Core ${NAGIOS_VERSION}...${txtrst}"
@@ -466,6 +478,10 @@ else
 fi
 }
 
+####################################################################
+#  Install Prerequisites Functions
+####################################################################
+
 install_centos() {
 # Check Firewall
 firewall-cmd --zone=public --add-port=80/tcp --permanent 2>/dev/null
@@ -504,6 +520,10 @@ echo
 sleep 2
 nagioscore_suse
 }
+
+####################################################################
+#  Check Functions for Install
+####################################################################
 
 check_packet_centos() {
 echo "${txtylw}Try to check existing Nagios${txtrst}"
@@ -623,125 +643,96 @@ check_os
 }
 
 ####################################################################
-#  Upgrade Nagios Functions
+#  Upgrade Nagios Core Functions
 ####################################################################
 
-upgrade_nagios_core() {
-echo "${txtylw}Backing up current Nagios installation to /usr/local/nagios-backup${txtrst}"
-sleep 2
-systemctl stop nagios 2>/dev/null
-service nagios stop 2>/dev/null
-cp -rp /usr/local/nagios /usr/local/nagios-backup
-echo "${txtgrn}Done${txtrst}"
+upgrade_nagios_centos() {
+echo "${txtpur}Check Nagios Core Version${txtrst}"
+core_existing_version=`/usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' | sed 's/.$//'`
 
 echo
-echo "${txtylw}Downloading Nagios Core ${NAGIOS_VERSION}...${txtrst}"
+echo "${txtylw}I will check existing nagios version in your server. Please wait a minute ...${txtrst}"
 sleep 2
-mkdir -p upgrade-nagios
-cd upgrade-nagios
-wget --no-check-certificate "${NAGIOS_URL}" -O ${nagios_core}
+echo "${txtcyn}Your Nagios version is ${core_existing_version}${txtrst}"
+echo
+sleep 2
+echo "${txtylw}I will check latest nagios version. Please wait a minute ...${txtrst}"
+sleep 2
+echo "${txtcyn}Latest Nagios version is ${NAGIOS_VERSION}${txtrst}"
+sleep 2
+echo
 
-count=`ls -1 ${nagios_core} 2>/dev/null | wc -l`
-if [ $count != 0 ]
+# Compare versions (remove dots for numeric comparison)
+core_existing=`echo $core_existing_version | tr -d '.'`
+core_latest=`echo $NAGIOS_VERSION | tr -d '.'`
+
+if [ "$core_existing" -ge "$core_latest" ] 2>/dev/null
 then
-    echo "${txtgrn}Done${txtrst}"
+    echo "${txtgrn}Your existing Nagios version is up-to-date.${txtrst}"
     echo
-    echo "${txtylw}Extract package Nagios${txtrst}"
     sleep 2
-    tar -zxvf ${nagios_core};check
-    echo "${txtgrn}Done${txtrst}"
-    sleep 2
-    
-    echo
-    echo "${txtylw}Compiling Nagios${txtrst}"
-    sleep 2
-    cd ${folder_nagios}
-    
-    # Detect OS and configure accordingly
-    if [ -f /etc/debian_version ]; then
-        ./configure --with-command-group=nagcmd --with-httpd-conf=/etc/apache2/sites-enabled;check
-    elif [ -f /etc/SUSE-brand ]; then
-        ./configure --with-command-group=nagcmd --with-httpd-conf=/etc/apache2/vhosts.d;check
-    else
-        ./configure --with-command-group=nagcmd;check
-    fi
-    
-    make all;check
-    make install;check
-    make install-daemoninit 2>/dev/null
-    echo "${txtgrn}Done${txtrst}"
-    sleep 2
-    
-    echo
-    echo "${txtylw}Starting Nagios Service${txtrst}"
-    systemctl daemon-reload 2>/dev/null
-    systemctl start nagios 2>/dev/null
-    service nagios start 2>/dev/null
-    echo "${txtgrn}Done${txtrst}"
-    
-    echo
-    echo "${txtpur}Checking Nagios Core version${txtrst}"
-    sleep 2
-    /usr/local/nagios/bin/nagios -V | head -n 2
-    echo
-    echo "${txtgrn}Your Nagios Core has been upgraded to version ${NAGIOS_VERSION}${txtrst}"
-    
-    cd $path
-    rm -rf upgrade-nagios
-    echo
-    upgrade_nagios_plugin
+    check_upgrade_plugin
 else
-    echo "${txtred}Failed to download Nagios Core. Please check your internet connection.${txtrst}"
-    stop
-fi
-}
-
-upgrade_nagios_plugin() {
-echo
-echo "${txtpur}Check Nagios Plugins version${txtrst}"
-existing_plugin=`/usr/local/nagios/libexec/check_ssh -V 2>/dev/null | awk '{print $2}' | sed 's/^v//'`
-echo "${txtcyn}Your Nagios Plugins version is: ${existing_plugin:-unknown}${txtrst}"
-echo "${txtcyn}Latest Nagios Plugins version is: ${NAGIOS_PLUGINS_VERSION}${txtrst}"
-sleep 2
-
-if [ "$existing_plugin" = "$NAGIOS_PLUGINS_VERSION" ]; then
-    echo "${txtgrn}Your Nagios Plugins version is up-to-date.${txtrst}"
-    thankyou
-else
+    echo "${txtylw}Your existing Nagios version is not up-to-date.${txtrst}"
     while true
     do
-        read -p "${txtylw}Do you want to upgrade Nagios Plugins to ${NAGIOS_PLUGINS_VERSION}? (y/n): ${txtrst}" answer
+        read -p "${txtylw}Are you sure want to update (y/n)? ${txtrst}" answer
+        echo
         case $answer in
             [yY]* )
-                echo "${txtylw}Downloading Nagios Plugins ${NAGIOS_PLUGINS_VERSION}...${txtrst}"
-                mkdir -p upgrade-plugin
-                cd upgrade-plugin
-                wget --no-check-certificate "${NAGIOS_PLUGINS_URL}" -O ${nagios_plugin}
+                sleep 2
+                echo
+                echo "${txtpur}Okay, I will upgrade your nagios version to ${NAGIOS_VERSION}.${txtrst}"
+                echo "${txtpur}I will backup your nagios to /usr/local/nagios-backup.${txtrst}"
+                sleep 2
+                systemctl stop nagios 2>/dev/null
+                service nagios stop 2>/dev/null
+                cp -rp /usr/local/nagios /usr/local/nagios-backup
+                echo
+                echo "${txtpur}Okay, I will download Nagios Core ${NAGIOS_VERSION}.${txtrst}"
+                sleep 2
                 
-                count=`ls -1 ${nagios_plugin} 2>/dev/null | wc -l`
-                if [ $count != 0 ]; then
-                    tar -zxvf ${nagios_plugin};check
-                    cd ${folder_plugin}
-                    ./configure --with-nagios-user=nagios --with-nagios-group=nagios;check
-                    make;check
+                mkdir -p upgrade-nagios
+                cd upgrade-nagios
+                wget --no-check-certificate "${NAGIOS_URL}" -O ${nagios_core}
+                
+                count=`ls -1 ${nagios_core} 2>/dev/null | wc -l`
+                if [ $count != 0 ]
+                then
+                    sleep 2
+                    tar -zxvf ${nagios_core};check
+                    cd ${folder_nagios}
+                    ./configure --with-command-group=nagcmd;check
+                    make all;check
                     make install;check
-                    
+                    make install-daemoninit 2>/dev/null
+                    systemctl daemon-reload 2>/dev/null
+                    systemctl start nagios 2>/dev/null
+                    service nagios start 2>/dev/null
                     echo
-                    echo "${txtylw}Restarting Nagios Service${txtrst}"
-                    systemctl restart nagios 2>/dev/null
-                    service nagios restart 2>/dev/null
-                    echo "${txtgrn}Done${txtrst}"
-                    
+                    echo "${txtpur}Okay, I will check your existing Nagios Core version.${txtrst}"
+                    sleep 1
+                    /usr/local/nagios/bin/nagios -V | head -n 2
+                    sleep 2
                     echo
-                    echo "${txtgrn}Nagios Plugins upgraded to version ${NAGIOS_PLUGINS_VERSION}${txtrst}"
+                    echo "${txtgrn}Your Nagios Core is updated to version ${NAGIOS_VERSION}.${txtrst}"
+                    cd $path
+                    rm -rf upgrade-nagios
+                    echo
+                    check_upgrade_plugin
+                    sleep 2
+                    echo
+                    thankyou
+                    sleep 2
+                    exit
+                else
+                    echo "${txtred}Failed to download Nagios Core. Please check your internet connection.${txtrst}"
+                    stop
                 fi
-                
-                cd $path
-                rm -rf upgrade-plugin
-                thankyou
                 break;;
             [nN]* )
-                thankyou
+                sleep 2
+                check_upgrade_plugin
                 break;;
             * )
                 echo "Just enter Y or N, please.";;
@@ -750,21 +741,321 @@ else
 fi
 }
 
+upgrade_nagios_ubuntu() {
+echo "${txtpur}Check Nagios Core Version${txtrst}"
+core_existing_version=`/usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' | sed 's/.$//'`
+
+echo
+echo "${txtylw}I will check existing nagios version in your server. Please wait a minute ...${txtrst}"
+sleep 2
+echo "${txtcyn}Your Nagios version is ${core_existing_version}${txtrst}"
+echo
+sleep 2
+echo "${txtylw}I will check latest nagios version. Please wait a minute ...${txtrst}"
+sleep 2
+echo "${txtcyn}Latest Nagios version is ${NAGIOS_VERSION}${txtrst}"
+sleep 2
+echo
+
+# Compare versions
+core_existing=`echo $core_existing_version | tr -d '.'`
+core_latest=`echo $NAGIOS_VERSION | tr -d '.'`
+
+if [ "$core_existing" -ge "$core_latest" ] 2>/dev/null
+then
+    echo "${txtgrn}Your existing Nagios version is up-to-date.${txtrst}"
+    echo
+    sleep 2
+    check_upgrade_plugin
+else
+    echo "${txtylw}Your existing Nagios version is not up-to-date.${txtrst}"
+    while true
+    do
+        read -p "${txtylw}Are you sure want to update (y/n)? ${txtrst}" answer
+        echo
+        case $answer in
+            [yY]* )
+                sleep 2
+                echo
+                echo "${txtpur}Okay, I will upgrade your nagios version to ${NAGIOS_VERSION}.${txtrst}"
+                echo "${txtpur}I will backup your nagios to /usr/local/nagios-backup.${txtrst}"
+                sleep 2
+                systemctl stop nagios 2>/dev/null
+                cp -rp /usr/local/nagios /usr/local/nagios-backup
+                echo
+                echo "${txtpur}Okay, I will download Nagios Core ${NAGIOS_VERSION}.${txtrst}"
+                sleep 2
+                
+                mkdir -p upgrade-nagios
+                cd upgrade-nagios
+                wget --no-check-certificate "${NAGIOS_URL}" -O ${nagios_core}
+                
+                count=`ls -1 ${nagios_core} 2>/dev/null | wc -l`
+                if [ $count != 0 ]
+                then
+                    sleep 2
+                    tar -zxvf ${nagios_core};check
+                    cd ${folder_nagios}
+                    ./configure --with-command-group=nagcmd --with-httpd-conf=/etc/apache2/sites-enabled;check
+                    make all;check
+                    make install;check
+                    make install-daemoninit 2>/dev/null
+                    systemctl daemon-reload 2>/dev/null
+                    systemctl start nagios 2>/dev/null
+                    echo
+                    echo "${txtpur}Okay, I will check your existing Nagios Core version.${txtrst}"
+                    sleep 1
+                    /usr/local/nagios/bin/nagios -V | head -n 2
+                    sleep 2
+                    echo
+                    echo "${txtgrn}Your Nagios Core is updated to version ${NAGIOS_VERSION}.${txtrst}"
+                    cd $path
+                    rm -rf upgrade-nagios
+                    echo
+                    check_upgrade_plugin
+                    sleep 2
+                    echo
+                    thankyou
+                    sleep 2
+                    exit
+                else
+                    echo "${txtred}Failed to download Nagios Core. Please check your internet connection.${txtrst}"
+                    stop
+                fi
+                break;;
+            [nN]* )
+                sleep 2
+                check_upgrade_plugin
+                break;;
+            * )
+                echo "Just enter Y or N, please.";;
+        esac
+    done
+fi
+}
+
+upgrade_nagios_suse() {
+echo "${txtpur}Check Nagios Core Version${txtrst}"
+core_existing_version=`/usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' | sed 's/.$//'`
+
+echo
+echo "${txtylw}I will check existing nagios version in your server. Please wait a minute ...${txtrst}"
+sleep 2
+echo "${txtcyn}Your Nagios version is ${core_existing_version}${txtrst}"
+echo
+sleep 2
+echo "${txtylw}I will check latest nagios version. Please wait a minute ...${txtrst}"
+sleep 2
+echo "${txtcyn}Latest Nagios version is ${NAGIOS_VERSION}${txtrst}"
+sleep 2
+echo
+
+# Compare versions
+core_existing=`echo $core_existing_version | tr -d '.'`
+core_latest=`echo $NAGIOS_VERSION | tr -d '.'`
+
+if [ "$core_existing" -ge "$core_latest" ] 2>/dev/null
+then
+    echo "${txtgrn}Your existing Nagios version is up-to-date.${txtrst}"
+    echo
+    sleep 2
+    check_upgrade_plugin
+else
+    echo "${txtylw}Your existing Nagios version is not up-to-date.${txtrst}"
+    while true
+    do
+        read -p "${txtylw}Are you sure want to update (y/n)? ${txtrst}" answer
+        echo
+        case $answer in
+            [yY]* )
+                sleep 2
+                echo
+                echo "${txtpur}Okay, I will upgrade your nagios version to ${NAGIOS_VERSION}.${txtrst}"
+                echo "${txtpur}I will backup your nagios to /usr/local/nagios-backup.${txtrst}"
+                sleep 2
+                systemctl stop nagios 2>/dev/null
+                cp -rp /usr/local/nagios /usr/local/nagios-backup
+                echo
+                echo "${txtpur}Okay, I will download Nagios Core ${NAGIOS_VERSION}.${txtrst}"
+                sleep 2
+                
+                mkdir -p upgrade-nagios
+                cd upgrade-nagios
+                wget --no-check-certificate "${NAGIOS_URL}" -O ${nagios_core}
+                
+                count=`ls -1 ${nagios_core} 2>/dev/null | wc -l`
+                if [ $count != 0 ]
+                then
+                    sleep 2
+                    tar -zxvf ${nagios_core};check
+                    cd ${folder_nagios}
+                    ./configure --with-command-group=nagcmd --with-httpd-conf=/etc/apache2/vhosts.d;check
+                    make all;check
+                    make install;check
+                    make install-daemoninit 2>/dev/null
+                    systemctl daemon-reload 2>/dev/null
+                    systemctl start nagios 2>/dev/null
+                    echo
+                    echo "${txtpur}Okay, I will check your existing Nagios Core version.${txtrst}"
+                    sleep 1
+                    /usr/local/nagios/bin/nagios -V | head -n 2
+                    sleep 2
+                    echo
+                    echo "${txtgrn}Your Nagios Core is updated to version ${NAGIOS_VERSION}.${txtrst}"
+                    cd $path
+                    rm -rf upgrade-nagios
+                    echo
+                    check_upgrade_plugin
+                    sleep 2
+                    echo
+                    thankyou
+                    sleep 2
+                    exit
+                else
+                    echo "${txtred}Failed to download Nagios Core. Please check your internet connection.${txtrst}"
+                    stop
+                fi
+                break;;
+            [nN]* )
+                sleep 2
+                check_upgrade_plugin
+                break;;
+            * )
+                echo "Just enter Y or N, please.";;
+        esac
+    done
+fi
+}
+
+####################################################################
+#  Upgrade Nagios Plugin Functions
+####################################################################
+
+check_upgrade_plugin() {
+echo
+echo "${txtpur}Check Nagios Plugins version${txtrst}"
+existing_plugin=`/usr/local/nagios/libexec/check_ssh -V 2>/dev/null | awk '{print $2}' | sed 's/^v//'`
+
+echo
+echo "${txtylw}I will check existing plugin nagios version in your server. Please wait a minute ...${txtrst}"
+sleep 2
+echo "${txtcyn}Your Nagios Plugins version is ${existing_plugin:-unknown}${txtrst}"
+echo
+sleep 2
+echo "${txtylw}I will check latest plugin nagios version. Please wait a minute ...${txtrst}"
+sleep 2
+echo "${txtcyn}Latest Nagios Plugins version is ${NAGIOS_PLUGINS_VERSION}${txtrst}"
+sleep 2
+echo
+
+if [ "$existing_plugin" = "$NAGIOS_PLUGINS_VERSION" ]
+then
+    echo "${txtgrn}Your existing Nagios Plugins version is up-to-date.${txtrst}"
+    echo
+    thankyou
+    sleep 3
+else
+    while true
+    do
+        read -p "${txtylw}Are you sure want to update your Nagios Plugins (y/n)? ${txtrst}" answer
+        echo
+        case $answer in
+            [yY]* )
+                sleep 1
+                echo
+                upgrade_plugin
+                break;;
+            [nN]* )
+                sleep 1
+                echo
+                thankyou
+                sleep 2
+                exit
+                break;;
+            * )
+                echo "Just enter Y or N, please.";;
+        esac
+    done
+fi
+}
+
+upgrade_plugin() {
+echo "${txtpur}Okay, I will upgrade your nagios plugins version to ${NAGIOS_PLUGINS_VERSION}.${txtrst}"
+sleep 1
+echo "${txtpur}I will backup your nagios to /usr/local/nagios-backup.${txtrst}"
+sleep 2
+systemctl stop nagios 2>/dev/null
+service nagios stop 2>/dev/null
+cp -rp /usr/local/nagios /usr/local/nagios-backup 2>/dev/null
+echo
+echo "${txtpur}Okay, I will download Nagios Plugins ${NAGIOS_PLUGINS_VERSION}.${txtrst}"
+sleep 2
+
+mkdir -p upgrade-plugin
+cd upgrade-plugin
+wget --no-check-certificate "${NAGIOS_PLUGINS_URL}" -O ${nagios_plugin}
+
+count=`ls -1 ${nagios_plugin} 2>/dev/null | wc -l`
+if [ $count != 0 ]
+then
+    sleep 2
+    tar -zxvf ${nagios_plugin};check
+    cd ${folder_plugin}
+    ./configure --with-nagios-user=nagios --with-nagios-group=nagios;check
+    make;check
+    make install;check
+    systemctl start nagios 2>/dev/null
+    service nagios start 2>/dev/null
+    echo
+    echo "${txtpur}Okay, I will check your existing Nagios Plugins version.${txtrst}"
+    sleep 1
+    /usr/local/nagios/libexec/check_ssh -V 2>/dev/null | head -n 1
+    sleep 2
+    echo
+    echo "${txtgrn}Your Nagios Plugins is updated to version ${NAGIOS_PLUGINS_VERSION}.${txtrst}"
+    cd $path
+    rm -rf upgrade-plugin
+    echo
+    thankyou
+    sleep 2
+    exit
+else
+    echo "${txtred}Failed to download Nagios Plugins. Please check your internet connection.${txtrst}"
+    stop
+fi
+}
+
+####################################################################
+#  Upgrade Main Functions
+####################################################################
+
 check_os_upgrade() {
 echo "${txtylw}Try to guess your operating system${txtrst}"
 sleep 2
-if [ -f /etc/debian_version ]; then
+if [ -f /etc/debian_version ]
+then
     echo "${txtgrn}Your Operating System is $(cat /etc/os-release | grep ^NAME | awk 'NR > 1 {print $1}' RS='"' FS='"') $(cat /etc/debian_version)${txtrst}"
-elif [ -f /etc/redhat-release ]; then
+    sleep 2
+    echo
+    upgrade_nagios_ubuntu
+elif [ -f /etc/redhat-release ]
+then
     echo "${txtgrn}Your Operating System is $(cat /etc/redhat-release)${txtrst}"
-elif [ -f /etc/SUSE-brand ]; then
+    sleep 2
+    echo
+    upgrade_nagios_centos
+elif [ -f /etc/SUSE-brand ]
+then
     echo "${txtgrn}Your Operating System is $(cat /etc/os-release | grep PRETTY_NAME | sed 's/.*=//' | sed 's/^.//' | sed 's/.$//')${txtrst}"
+    sleep 2
+    echo
+    upgrade_nagios_suse
 else
-    echo "${txtred}Unsupported operating system${txtrst}"
+    echo "${txtred}I think your OS is not Debian/Ubuntu or RedHat-Based (CentOS, AlmaLinux, RockyLinux, Fedora) or openSUSE${txtrst}"
+    echo "${txtred}I am sorry, only work on Linux Debian/Ubuntu, RedHat-Based, and openSUSE${txtrst}"
+    echo "${txtred}So, I can not upgrade Nagios in your server${txtrst}"
     stop
 fi
-sleep 2
-echo
 }
 
 upgrade_nagios() {
@@ -773,47 +1064,22 @@ echo "${txtbld}using default folder (/usr/local/nagios) in this server.${txtrst}
 sleep 2
 echo
 echo "${txtylw}I will check whether Nagios application exists or not.${txtrst}"
+echo "${txtylw}Please wait a minute...${txtrst}"
 sleep 2
 
-if [ -d "/usr/local/nagios/" ]; then
+if [ -d "/usr/local/nagios/" ]
+then
     echo "${txtgrn}It looks like you have installed Nagios.${txtrst}"
     sleep 2
     echo
     check_user
     check_internet
     check_os_upgrade
-    
-    echo "${txtpur}Check Nagios Core Version${txtrst}"
-    core_existing_version=`/usr/local/nagios/bin/nagios --help | grep Core | head -n 1 | tr -dc '0-9' | sed 's/.\{1\}/&./g' | sed 's/.$//'`
-    echo "${txtcyn}Your Nagios version is: ${core_existing_version}${txtrst}"
-    echo "${txtcyn}Latest Nagios version is: ${NAGIOS_VERSION}${txtrst}"
-    sleep 2
-    
-    # Compare versions
-    if [ "$core_existing_version" = "$NAGIOS_VERSION" ]; then
-        echo "${txtgrn}Your existing Nagios version is up-to-date.${txtrst}"
-        echo
-        upgrade_nagios_plugin
-    else
-        echo "${txtylw}Your existing Nagios version is not up-to-date.${txtrst}"
-        while true
-        do
-            read -p "${txtylw}Are you sure you want to upgrade to ${NAGIOS_VERSION}? (y/n): ${txtrst}" answer
-            case $answer in
-                [yY]* )
-                    upgrade_nagios_core
-                    break;;
-                [nN]* )
-                    upgrade_nagios_plugin
-                    break;;
-                * )
-                    echo "Just enter Y or N, please.";;
-            esac
-        done
-    fi
 else
-    echo "${txtred}It looks like you have not installed Nagios yet or you installed Nagios not from source.${txtrst}"
+    sleep 2
+    echo "${txtred}It looks like you have not installed Nagios yet or you installed Nagios not from source but using Yum.${txtrst}"
     echo "${txtred}Please install Nagios using source first.${txtrst}"
+    echo "${txtred}You have not installed Nagios${txtrst}" >> $log 2>/dev/null
 fi
 }
 
