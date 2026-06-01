@@ -38,10 +38,11 @@ if [ -t 1 ] && command -v tput >/dev/null 2>&1; then
     txtgrn=$(tput setaf 2)
     txtylw=$(tput setaf 3)
     txtblu=$(tput setaf 4)
+    txtpur=$(tput setaf 5)
     txtcyn=$(tput setaf 6)
     txtrst=$(tput sgr0)
 else
-    txtbld="" ; txtred="" ; txtgrn="" ; txtylw="" ; txtblu=""; txtcyn="" ; txtrst=""
+    txtbld="" ; txtred="" ; txtgrn="" ; txtylw="" ; txtblu=""; txtpur="" ; txtcyn="" ; txtrst=""
 fi
 
 ############ Pinned fallback versions (used if auto-detection fails) ############
@@ -603,6 +604,127 @@ do_delete() {
     thankyou
 }
 
+############ Cleanup / free disk space ############
+
+# Delete archived logs older than $2 days from directory $1; report what changed.
+prune_archives() {
+    local dir="$1" days="$2" before after
+    before=$(find "$dir" -type f -name '*.log' 2>/dev/null | wc -l)
+    find "$dir" -type f -name '*.log' -mtime +"$days" -delete 2>/dev/null
+    after=$(find "$dir" -type f -name '*.log' 2>/dev/null | wc -l)
+    ok "Kept the last ${days} days. Removed $((before - after)) archive file(s); ${after} remain ($(du -sh "$dir" 2>/dev/null | awk '{print $1}'))."
+}
+
+do_cleanup() {
+    require_root
+    detect_os
+    local freed_any="no"
+
+    # --- 1. Nagios backup directories (created by the upgrade path) ---
+    local bdirs=()
+    while IFS= read -r d; do [ -n "$d" ] && bdirs+=("$d"); done \
+        < <(ls -1dt /usr/local/nagios-backup /usr/local/nagios-backup-* 2>/dev/null)
+
+    if [ "${#bdirs[@]}" -gt 0 ]; then
+        echo
+        note "Nagios backup directories (newest first):"
+        du -sh "${bdirs[@]}" 2>/dev/null
+        echo
+        echo "  1) Delete ALL backups"
+        echo "  2) Keep the most recent, delete older ones"
+        echo "  3) Skip"
+        read -r -p "${txtylw}Choose [1-3]: ${txtrst}" ans
+        case "$ans" in
+            1)
+                if confirm "Delete all ${#bdirs[@]} backup director(ies)?"; then
+                    rm -rf "${bdirs[@]}"; ok "All backups removed."; freed_any="yes"
+                fi ;;
+            2)
+                if [ "${#bdirs[@]}" -le 1 ]; then
+                    note "Only one backup present; nothing older to remove."
+                else
+                    note "Keeping: ${bdirs[0]}"
+                    rm -rf "${bdirs[@]:1}"; ok "Older backups removed."; freed_any="yes"
+                fi ;;
+            *) note "Skipped backups." ;;
+        esac
+    else
+        note "No Nagios backup directories found."
+    fi
+
+    # --- 2. Leftover build directories from interrupted runs ---
+    local tdirs=()
+    while IFS= read -r d; do [ -n "$d" ] && tdirs+=("$d"); done \
+        < <(ls -1d /tmp/allion.* 2>/dev/null)
+    # Never remove our own current working directory.
+    local keep="$WORKDIR" t leftovers=()
+    for t in "${tdirs[@]}"; do [ "$t" = "$keep" ] || leftovers+=("$t"); done
+    if [ "${#leftovers[@]}" -gt 0 ]; then
+        echo
+        note "Leftover build directories in /tmp:"
+        du -sh "${leftovers[@]}" 2>/dev/null
+        if confirm "Remove these leftover build directories?"; then
+            rm -rf "${leftovers[@]}"; ok "Removed."; freed_any="yes"
+        fi
+    fi
+
+    # --- 3. Nagios log archives (historical logs; live monitoring unaffected) ---
+    local arch="${NAGIOS_HOME}/var/archives"
+    if [ -d "$arch" ] && ls "$arch"/*.log >/dev/null 2>&1; then
+        local sz oldest newest
+        sz=$(du -sh "$arch" 2>/dev/null | awk '{print $1}')
+        echo
+        note "Nagios log archives: ${arch} (${sz})"
+        oldest=$(find "$arch" -type f -name '*.log' -printf '%TY-%Tm-%Td\n' 2>/dev/null | sort | head -n1)
+        newest=$(find "$arch" -type f -name '*.log' -printf '%TY-%Tm-%Td\n' 2>/dev/null | sort | tail -n1)
+        [ -n "$oldest" ] && note "Currently spanning ${oldest} to ${newest}."
+        warn "These are rotated historical logs, used only for past-date availability/trends"
+        warn "reports. Deleting them does NOT affect current monitoring."
+        echo "  1) Keep last 365 days (1 year), delete older   [recommended]"
+        echo "  2) Keep last 730 days (2 years), delete older"
+        echo "  3) Keep a custom number of days (you enter it)"
+        echo "  4) Delete ALL archived logs"
+        echo "  5) Skip (keep everything)"
+        read -r -p "${txtylw}Choose [1-5]: ${txtrst}" ans
+        case "$ans" in
+            1) prune_archives "$arch" 365; freed_any="yes" ;;
+            2) prune_archives "$arch" 730; freed_any="yes" ;;
+            3)
+                local days
+                read -r -p "${txtylw}Keep how many days of archives? ${txtrst}" days
+                if printf '%s' "$days" | grep -qE '^[1-9][0-9]*$'; then
+                    prune_archives "$arch" "$days"; freed_any="yes"
+                else
+                    err "'${days}' is not a valid positive whole number; keeping all archives."
+                fi ;;
+            4) if confirm "Really delete ALL archived logs in ${arch}?"; then rm -f "$arch"/*.log; ok "All archives removed."; freed_any="yes"; fi ;;
+            *) note "Skipped archives (kept everything)." ;;
+        esac
+    fi
+
+    # --- 4. Package cache and systemd journal ---
+    echo
+    if confirm "Clean the package cache and trim the systemd journal to 200M?"; then
+        case "$OS_FAMILY" in
+            debian) apt-get clean 2>/dev/null ;;
+            rhel)   { command -v dnf >/dev/null 2>&1 && dnf clean all; } 2>/dev/null || yum clean all 2>/dev/null ;;
+            suse)   zypper clean --all 2>/dev/null ;;
+        esac
+        command -v journalctl >/dev/null 2>&1 && journalctl --vacuum-size=200M 2>/dev/null
+        ok "Done."
+        freed_any="yes"
+    fi
+
+    echo
+    [ "$freed_any" = "yes" ] && ok "Cleanup finished." || note "Nothing was removed."
+    note "Current disk usage:"
+    df -h / 2>/dev/null
+    echo
+    note "Note: NagiosQL (if installed) stores its data under /etc/nagiosql and is a separate"
+    note "tool this script does not manage. Review that directory manually if it is large."
+    thankyou
+}
+
 ############ Small interactive helper ############
 
 # Ask a yes/no question; return 0 for yes, 1 for no.
@@ -627,6 +749,7 @@ echo "${txtgrn}1. Install Nagios (latest, currently ${NAGIOS_VERSION})${txtrst}"
 echo "${txtylw}2. Upgrade Nagios${txtrst}"
 echo "${txtblu}3. Install NRPE${txtrst}"
 echo "${txtred}4. Delete Nagios${txtrst}"
+echo "${txtpur}5. Cleanup / free disk space (old backups, build dirs, log archives)${txtrst}"
 echo -n "Enter your choice: "
 read -r choice
 echo
@@ -636,5 +759,6 @@ case "$choice" in
     2) do_upgrade ;;
     3) do_nrpe ;;
     4) do_delete ;;
+    5) do_cleanup ;;
     *) err "Invalid choice. Exiting." ; exit 1 ;;
 esac
