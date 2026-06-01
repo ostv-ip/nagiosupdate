@@ -140,13 +140,39 @@ check_internet() {
     log "Internet connectivity OK"
 }
 
+############ Download helpers ############
+
+# Choose a downloader once: curl if present, otherwise wget.
+DL=""
+detect_downloader() {
+    [ -n "$DL" ] && return 0
+    if   command -v curl >/dev/null 2>&1; then DL="curl"
+    elif command -v wget >/dev/null 2>&1; then DL="wget"
+    else die "Neither curl nor wget is installed. Install one (e.g. apt-get install -y curl) and re-run."
+    fi
+}
+
+# Print a URL's body to stdout (used for the GitHub API). Empty on failure.
+fetch_stdout() {
+    case "$DL" in
+        curl) curl -fsSL --max-time 15 "$1" 2>/dev/null ;;
+        wget) wget -q --timeout=15 -O - "$1" 2>/dev/null ;;
+    esac
+}
+
+# Download URL $1 to file $2. Returns non-zero on failure.
+fetch_file() {
+    case "$DL" in
+        curl) curl -fSL --retry 3 -o "$2" "$1" ;;
+        wget) wget --tries=3 --timeout=30 -O "$2" "$1" ;;
+    esac
+}
+
 ############ Version helpers ############
 
 # Print the tag_name of the latest GitHub release for owner/repo (empty on failure).
 gh_latest_tag() {
-    local repo="$1"
-    command -v curl >/dev/null 2>&1 || return 0
-    curl -fsSL --max-time 15 "https://api.github.com/repos/${repo}/releases/latest" 2>/dev/null \
+    fetch_stdout "https://api.github.com/repos/$1/releases/latest" \
         | grep -m1 '"tag_name"' \
         | sed -E 's/.*"tag_name"[[:space:]]*:[[:space:]]*"([^"]+)".*/\1/'
 }
@@ -158,6 +184,7 @@ version_ge() {
 }
 
 detect_versions() {
+    detect_downloader
     [ "$AUTO_DETECT_LATEST" = "yes" ] || { note "Auto-detect disabled; using pinned versions."; return; }
     say "Looking up the newest available releases on GitHub..."
     local t
@@ -199,8 +226,9 @@ installed_plugin_version() {
 # Download $1 to $WORKDIR/$2 over HTTPS with certificate verification.
 download() {
     local url="$1" out="$2"
+    detect_downloader
     say "Downloading ${out}..."
-    ( cd "$WORKDIR" && run curl -fSL --retry 3 -o "$out" "$url" )
+    fetch_file "$url" "${WORKDIR}/${out}" || die "failed to download ${url}"
     [ -s "${WORKDIR}/${out}" ] || die "download produced an empty file: ${out}"
     ok "Done"
 }
@@ -418,9 +446,11 @@ do_upgrade() {
         ok "Nagios Core is already up to date."
     else
         if confirm "Upgrade Nagios Core to ${NAGIOS_VERSION}?"; then
-            say "Backing up ${NAGIOS_HOME} to ${NAGIOS_HOME}-backup ..."
+            local backup
+            backup="${NAGIOS_HOME}-backup-$(date +%Y%m%d-%H%M%S)"
+            say "Backing up ${NAGIOS_HOME} to ${backup} ..."
             systemctl stop nagios 2>/dev/null || service nagios stop 2>/dev/null
-            run cp -rp "$NAGIOS_HOME" "${NAGIOS_HOME}-backup"
+            run cp -rp "$NAGIOS_HOME" "$backup"
             download "$NAGIOS_URL" "$NAGIOS_TGZ"
             run tar -xzf "${WORKDIR}/${NAGIOS_TGZ}" -C "$WORKDIR"
             cd "${WORKDIR}/${NAGIOS_DIR}" || die "cannot enter ${NAGIOS_DIR}"
