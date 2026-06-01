@@ -65,6 +65,7 @@ PKG_INSTALL=""        # full package-install command
 APACHE_USER=""        # www-data | apache | wwwrun
 APACHE_SVC=""         # apache2 | httpd
 HTTPD_CONF_FLAG=""    # extra ./configure flag for the web config location
+CMD_GROUP="nagcmd"    # external-command group; auto-detected from an existing install on upgrade
 
 cleanup() { rm -rf "$WORKDIR" 2>/dev/null; }
 trap cleanup EXIT
@@ -301,13 +302,28 @@ install_prereqs() {
 ############ Install: users and groups ############
 
 create_users() {
-    say "Creating the nagios user and nagcmd group..."
+    say "Creating the nagios user and ${CMD_GROUP} group..."
     useradd -m nagios 2>/dev/null
-    groupadd nagcmd 2>/dev/null
-    usermod -a -G nagcmd nagios 2>/dev/null
-    # Add the web server user to nagcmd so the CGIs can write to the command file.
-    usermod -a -G nagcmd "$APACHE_USER" 2>/dev/null
+    groupadd "$CMD_GROUP" 2>/dev/null
+    usermod -a -G "$CMD_GROUP" nagios 2>/dev/null
+    # Add the web server user to the command group so the CGIs can write the command file.
+    usermod -a -G "$CMD_GROUP" "$APACHE_USER" 2>/dev/null
     ok "Done"
+}
+
+# Detect the external-command group an existing install was built with, so an upgrade
+# reuses it instead of assuming "nagcmd". Falls back to nagcmd if it can't be determined.
+detect_command_group() {
+    local p g=""
+    for p in "${NAGIOS_HOME}/var/rw" "${NAGIOS_HOME}/var/spool/checkresults" "${NAGIOS_HOME}/var"; do
+        [ -e "$p" ] || continue
+        g=$(stat -c '%G' "$p" 2>/dev/null)
+        [ -n "$g" ] && [ "$g" != "UNKNOWN" ] && break
+    done
+    [ -n "$g" ] && [ "$g" != "UNKNOWN" ] && CMD_GROUP="$g"
+    # Make sure the group exists so `make install` can chgrp to it (no-op if present).
+    groupadd -f "$CMD_GROUP" 2>/dev/null
+    note "Using external-command group: ${CMD_GROUP}"
 }
 
 ############ Install: Nagios Core ############
@@ -323,7 +339,7 @@ build_nagios_core() {
     say "Compiling Nagios Core ${NAGIOS_VERSION}..."
     cd "${WORKDIR}/${NAGIOS_DIR}" || die "cannot enter ${NAGIOS_DIR}"
     # shellcheck disable=SC2086
-    run ./configure --with-command-group=nagcmd $HTTPD_CONF_FLAG
+    run ./configure --with-command-group=$CMD_GROUP $HTTPD_CONF_FLAG
     run make all
     # install-groups-users is a no-op on older trees; ignore if absent.
     make install-groups-users 2>/dev/null
@@ -436,6 +452,7 @@ do_upgrade() {
     detect_versions
     set_urls
     detect_os
+    detect_command_group
 
     local cur_core
     cur_core="$(installed_core_version)"
@@ -455,7 +472,7 @@ do_upgrade() {
             run tar -xzf "${WORKDIR}/${NAGIOS_TGZ}" -C "$WORKDIR"
             cd "${WORKDIR}/${NAGIOS_DIR}" || die "cannot enter ${NAGIOS_DIR}"
             # shellcheck disable=SC2086
-            run ./configure --with-command-group=nagcmd $HTTPD_CONF_FLAG
+            run ./configure --with-command-group=$CMD_GROUP $HTTPD_CONF_FLAG
             run make all
             run make install
             make install-daemoninit 2>/dev/null || make install-init 2>/dev/null
